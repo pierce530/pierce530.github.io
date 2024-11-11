@@ -1,0 +1,465 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" >
+    <meta http-equiv="X-UA-Compatible" content="IE=11,IE=10,IE=9,IE=8" >
+    <meta name="baidu-site-verification" content="dIcXMeY8Ya" />
+    
+    <title>LangChain 实现聊天机器人基础 | Pierce小屋</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" >
+    <meta name="keywords" content="Pierce, 章靖宇" >
+    <meta name="description" content="章靖宇的个人博客" >
+
+    
+    
+    <link rel="icon" href="/img/favicon.ico" >
+    
+    
+<link rel="stylesheet" href="/css/style.css?v=1731332381084.css">
+
+    <!--[if lt IE 9]>
+    
+<script src="/js/html5.js"></script>
+
+    <![endif]-->
+    
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="home">
+    <!--[if lt IE 9]>
+    <div class="browsehappy">
+        当前网页 <strong>不支持</strong>
+        你正在使用的浏览器. 为了正常的访问, 请 <a target="_blank" rel="noopener" href="http://browsehappy.com/">升级你的浏览器</a>.
+    </div>
+    <![endif]-->
+
+    <!-- 博客头部 -->
+    <header class="header">
+    <section class="container header-main">
+        <div class="logo">
+            <a href="/">
+                <div class="cover">
+                    <span class="name">Pierce小屋</span>
+                    <span class="description">欢迎访问</span>
+                </div>
+            </a>
+        </div>
+        <div class="dropnav iconfont icon-nav" id="JELON__btnDropNav"></div>
+        <ul class="menu hidden" id="JELON__menu">
+            
+            <li rel="/2024/06/30/langchain_chatrobot/index.html" class="item ">
+                <a href="/" title="首页" class="iconfont icon-home">&nbsp;首页</a>
+            </li>
+            
+            <li rel="/2024/06/30/langchain_chatrobot/index.html" class="item ">
+                <a href="/archives/" title="归档" class="iconfont icon-archives">&nbsp;归档</a>
+            </li>
+            
+            <li rel="/2024/06/30/langchain_chatrobot/index.html" class="item ">
+                <a href="/about/" title="关于" class="iconfont icon-staff">&nbsp;关于</a>
+            </li>
+            
+            <li rel="/2024/06/30/langchain_chatrobot/index.html" class="item ">
+                <a href="/comment/" title="留言" class="iconfont icon-comment">&nbsp;留言</a>
+            </li>
+            
+        </ul>
+        <div class="profile clearfix">
+            <div class="feeds fl">
+                
+                
+                <p class="links">
+                    
+                        <a href="https://github.com/pierce530" target="_blank">Github</a>
+                        |
+                    
+                        <a href="https://blog.csdn.net/qq_43668800" target="_blank">CSDN</a>
+                        
+                    
+                </p>
+                <p class="sns">
+                    
+                        <a href="https://weibo.com/u/7756586759" class="sinaweibo" target="_blank"><b>■</b> 新浪微博</a>
+                    
+                        <a href="https://space.bilibili.com/351790592" class="bilibili" target="_blank"><b>■</b> bilibili</a>
+                    
+                    <a href="javascript: void(0);" class="wechat">
+                        <b>■</b>
+                        公众号
+                        <span class="popover">
+                            <img src="/img/wechat_mp.jpg" width="120" height="120" alt="我的微信订阅号">
+                            <i class="arrow"></i>
+                        </span>
+                    </a>
+                </p>
+                
+            </div>
+            <div class="avatar fr">
+                <img src="/img/pierce.jpg" alt="avatar" title="Jelon" >
+            </div>
+        </div>
+    </section>
+</header>
+
+
+    <!-- 博客正文 -->
+    <div class="container body clearfix">
+        <section class="content">
+            <div class="content-main widget">
+                <!-- 文章页 -->
+<!-- 文章 -->
+<article class="post article">
+    <header class="text-center">
+        <h3 class="post-title"><span>LangChain 实现聊天机器人基础</span></h3>
+    </header>
+    <p class="post-meta text-center">
+        Pierce 发表于
+        <time datetime="2024-06-29T16:00:00.000Z">2024-06-30</time>
+    </p>
+    <div id="JELON__articlePostContent" class="post-content">
+        <p>项目的接口模型是GPT-3.5</p>
+<h3 id="1-接入大模型"><a href="#1-接入大模型" class="headerlink" title="1 接入大模型"></a>1 接入大模型</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain_openai <span class="keyword">import</span> ChatOpenAI</span><br><span class="line"></span><br><span class="line">llm = ChatOpenAI(</span><br><span class="line">    openai_api_base=<span class="string">&quot;xxxxxxxxxxxxxxxx&quot;</span>,</span><br><span class="line">    openai_api_key=<span class="string">&quot;sk-xxxxxxxxxxxxxxxxxxxxxxxxxxx&quot;</span>,</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>可以看到，模型对打招呼做出返回：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain_core.messages <span class="keyword">import</span> HumanMessage</span><br><span class="line"></span><br><span class="line">llm.invoke([HumanMessage(content=<span class="string">&quot;Hi! I&#x27;m Bob&quot;</span>)])</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>AIMessage(content&#x3D;’Hello, Bob! Nice to meet you. How can I assist you today?’, response_metadata&#x3D;{‘token_usage’: {‘completion_tokens’: 0, ‘prompt_tokens’: 0, ‘total_tokens’: 0}, ‘model_name’: ‘gpt-3.5-turbo’, ‘system_fingerprint’: None, ‘finish_reason’: ‘stop’, ‘logprobs’: None}, id&#x3D;’run-3f0b67d0-0900-427c-9eda-9e405893be60-0’)</p>
+</blockquote>
+<p>但是此时再问人类的姓名，AI是不知道的，因为默认没有记忆功能</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">llm.invoke([HumanMessage(content=<span class="string">&quot;What&#x27;s my name?&quot;</span>)])</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>AIMessage(content&#x3D;”I’m sorry, I don’t have access to personal information like your name unless you tell me. How can I assist you today?”, response_metadata&#x3D;{‘token_usage’: {‘completion_tokens’: 0, ‘prompt_tokens’: 0, ‘total_tokens’: 0}, ‘model_name’: ‘gpt-3.5-turbo’, ‘system_fingerprint’: None, ‘finish_reason’: ‘stop’, ‘logprobs’: None}, id&#x3D;’run-0a75ae65-4202-4a69-bd67-859aa4be676c-0’)</p>
+</blockquote>
+<p>此处还要注意另一点，invoke方法这里调用的参数是<strong>input</strong>，其接受类型为**Union[PromptValue, str, Sequence[MessageLikeRepresentation]]**，也就是说PromptValue、字符串、消息列表都可以。上面实际上接受的是消息列表，下面尝试接受另两个类型：</p>
+<h3 id="2-多种输入类型作为prompt调用大模型"><a href="#2-多种输入类型作为prompt调用大模型" class="headerlink" title="2 多种输入类型作为prompt调用大模型"></a>2 多种输入类型作为prompt调用大模型</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">llm.invoke(<span class="string">&quot;Hello? Who are you?&quot;</span>) <span class="comment"># 此处是字符串类型调用</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>AIMessage(content&#x3D;”Hello! I’m ChatGPT, an AI language model. I’m here to help answer questions, have conversations, or assist with whatever you need. How can I help you today?”, response_metadata&#x3D;{‘token_usage’: {‘completion_tokens’: 0, ‘prompt_tokens’: 0, ‘total_tokens’: 0}, ‘model_name’: ‘gpt-3.5-turbo’, ‘system_fingerprint’: None, ‘finish_reason’: ‘stop’, ‘logprobs’: None}, id&#x3D;’run-035271f6-6633-493e-ba27-ec1707c188b2-0’)</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain_core.prompts <span class="keyword">import</span> PromptTemplate</span><br><span class="line"></span><br><span class="line"><span class="comment"># 此处是PromptValue类型调用，其中PromptValue本身是抽象类，StringPromptValue是字符串类型prompt的对其实现</span></span><br><span class="line"><span class="built_in">str</span> = <span class="string">&quot;Can you translate &#123;content&#125; to Chinese?&quot;</span></span><br><span class="line">promptTemplate = PromptTemplate.from_template(<span class="built_in">str</span>)</span><br><span class="line">prompt = promptTemplate.<span class="built_in">format</span>(content = <span class="string">&quot;pierce&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(promptTemplate, prompt)</span><br><span class="line">llm.invoke(prompt)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>input_variables&#x3D;[‘content’] template&#x3D;’Can you translate {content} to Chinese?’ Can you translate pierce to Chinese?<br>AIMessage(content&#x3D;’The word “pierce” can be translated to Chinese as 刺穿 (cì chuān) or 穿透 (chuān tòu), depending on the context in which it&#39;s used.’, response_metadata&#x3D;{‘token_usage’: {‘completion_tokens’: 0, ‘prompt_tokens’: 0, ‘total_tokens’: 0}, ‘model_name’: ‘gpt-3.5-turbo’, ‘system_fingerprint’: None, ‘finish_reason’: ‘stop’, ‘logprobs’: None}, id&#x3D;’run-fb10b27a-4491-443f-a233-ea48910ad089-0’)</p>
+</blockquote>
+<p>回到消息历史方面，我们可以将历史对话传给模型，让其看起来“有记忆功能”：</p>
+<h3 id="3-为其添加记忆功能"><a href="#3-为其添加记忆功能" class="headerlink" title="3 为其添加记忆功能"></a>3 为其添加记忆功能</h3><p>我们以消息列表的形式将历史记录传递给模型，从而实现记忆功能：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain_core.messages <span class="keyword">import</span> AIMessage</span><br><span class="line"></span><br><span class="line">llm.invoke(</span><br><span class="line">    [</span><br><span class="line">        HumanMessage(content=<span class="string">&quot;Hi! I&#x27;m Pierce&quot;</span>),</span><br><span class="line">        AIMessage(content=<span class="string">&quot;Hello Pierce! How can I assist you today?&quot;</span>),</span><br><span class="line">        HumanMessage(content=<span class="string">&quot;What&#x27;s my name?&quot;</span>),</span><br><span class="line">    ]</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>AIMessage(content&#x3D;’Your name is Pierce!’, response_metadata&#x3D;{‘token_usage’: {‘completion_tokens’: 0, ‘prompt_tokens’: 0, ‘total_tokens’: 0}, ‘model_name’: ‘gpt-3.5-turbo’, ‘system_fingerprint’: None, ‘finish_reason’: ‘stop’, ‘logprobs’: None}, id&#x3D;’run-286ba0d3-a673-4cb1-9522-a03638c97c0c-0’)</p>
+</blockquote>
+<p>这样显示地将对话历史作为消息列表prompt传给模型有点繁琐，合适的方法是这样的：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain_core.chat_history <span class="keyword">import</span> InMemoryChatMessageHistory</span><br><span class="line"><span class="keyword">from</span> langchain_core.runnables.history <span class="keyword">import</span> RunnableWithMessageHistory</span><br><span class="line"></span><br><span class="line"><span class="comment"># store 存储所有对话历史，作为memory</span></span><br><span class="line">store = &#123;&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_session_history</span>(<span class="params">session_id: <span class="built_in">str</span></span>) -&gt; InMemoryChatMessageHistory:</span><br><span class="line">    <span class="keyword">if</span> session_id <span class="keyword">not</span> <span class="keyword">in</span> store:</span><br><span class="line">        store[session_id] = InMemoryChatMessageHistory()</span><br><span class="line">    <span class="keyword">return</span> store[session_id]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">with_message_history = RunnableWithMessageHistory(llm, get_session_history)</span><br></pre></td></tr></table></figure>
+
+<p>这里，BaseChatMessageHistory作为基类是一个抽象类，要实现任何一个对话历史存储，都要继承自该抽象类，并实现下列方法中的一个或多个：</p>
+<ol>
+<li>add_messages: sync variant for bulk addition of messages</li>
+<li>aadd_messages: async variant for bulk addition of messages</li>
+<li>messages: sync variant for getting messages</li>
+<li>aget_messages: async variant for getting messages</li>
+<li>clear: sync variant for clearing messages</li>
+<li>aclear: async variant for clearing messages</li>
+</ol>
+<p>InMemoryChatMessageHistory()方法继承自抽象类并实现了上述方法</p>
+<p>这里get_session_history()方法确定如何获取需要的历史信息，session_id的设置用于区分不同的对话信息对于RunnableWithMessageHistory，其本质是一个Runnable，用于管理另一个Runnable的聊天消息历史记录。</p>
+<p>RunnableWithMessageHistory包装另一个Runnable并为其管理聊天消息历史；它负责读取和更新聊天消息历史记录</p>
+<p>调用时，必须始终使用包含聊天消息历史工厂的适当参数的配置来调用RunnableWithMessageHistory</p>
+<p>默认情况下，Runnable需要一个名为“session_id”的配置参数，该参数是一个字符串。该参数用于创建新的或查找与给定session_id匹配的现有聊天消息历史记录</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">config = &#123;<span class="string">&quot;configurable&quot;</span>: &#123;<span class="string">&quot;session_id&quot;</span>: <span class="string">&quot;test001&quot;</span>&#125;&#125;</span><br><span class="line"></span><br><span class="line">response = with_message_history.invoke(</span><br><span class="line">    [HumanMessage(content=<span class="string">&quot;Hi! I&#x27;m Pierce&quot;</span>)],</span><br><span class="line">    config=config,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">response.content</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Parent run 7c9e16c1-5f7f-44ef-97fc-98c97d2a4de2 not found for run e67007cd-0748-420b-8b16-44641b397ed8. Treating as a root run.<br>‘Hello Pierce! How can I assist you today?’</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">response = with_message_history.invoke(</span><br><span class="line">    [HumanMessage(content=<span class="string">&quot;What&#x27;s my name?&quot;</span>)],</span><br><span class="line">    config=config,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">response.content</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Parent run 4cb949d7-fc74-40f7-b7cf-a409637f761e not found for run bf0dba2c-930d-4166-b22b-5bd068fb8998. Treating as a root run.<br>‘Your name is Pierce.’</p>
+</blockquote>
+<p>可以看到，现在模型具有了真正的记忆能力。如果我们修改session_id，即置换到另一个对话的记忆，模型对该次对话的记忆就消失：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">config02 = &#123;<span class="string">&quot;configurable&quot;</span>: &#123;<span class="string">&quot;session_id&quot;</span>: <span class="string">&quot;test002&quot;</span>&#125;&#125;</span><br><span class="line"></span><br><span class="line">response = with_message_history.invoke(</span><br><span class="line">    [HumanMessage(content=<span class="string">&quot;What&#x27;s my name?&quot;</span>)],</span><br><span class="line">    config=config02,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">response.content</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Parent run f6da62fa-3db5-4e11-a7a4-819e87b9fc15 not found for run be939cc3-29f3-4d9a-bdb6-21bed23cbd4d. Treating as a root run.<br>“I’m sorry, but I do not have access to personal information about individuals unless it has been shared with me in the course of our conversation. I am designed to respect user privacy and confidentiality.”</p>
+</blockquote>
+<p>只要我们切换回来，就又可以实现记忆了：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">config = &#123;<span class="string">&quot;configurable&quot;</span>: &#123;<span class="string">&quot;session_id&quot;</span>: <span class="string">&quot;test001&quot;</span>&#125;&#125;</span><br><span class="line"></span><br><span class="line">response = with_message_history.invoke(</span><br><span class="line">    [HumanMessage(content=<span class="string">&quot;What&#x27;s my name?&quot;</span>)],</span><br><span class="line">    config=config,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">response.content</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>Parent run beb8df26-8f44-4e21-8982-9f321993caec not found for run 59eb38b9-d329-44eb-9a4e-232e7ff8b997. Treating as a root run.<br>‘Your name is Pierce.’</p>
+</blockquote>
+<p>因此，将记忆存储在磁盘内做持久化处理也就是可行的了。让我们看看store里存储的信息：</p>
+<blockquote>
+<p>{‘test001’: InMemoryChatMessageHistory(messages&#x3D;[HumanMessage(content&#x3D;”Hi! I’m Pierce”), AIMessage(content&#x3D;’Hello Pierce! How can I assist you today?’, response_metadata&#x3D;{‘token_usage’: {‘completion_tokens’: 10, ‘prompt_tokens’: 12, ‘total_tokens’: 22}, ‘model_name’: ‘gpt-3.5-turbo’, ‘system_fingerprint’: None, ‘finish_reason’: ‘stop’, ‘logprobs’: None}, id&#x3D;’run-e67007cd-0748-420b-8b16-44641b397ed8-0’), HumanMessage(content&#x3D;”What’s my name?”), AIMessage(content&#x3D;’Your name is Pierce.’, response_metadata&#x3D;{‘token_usage’: {‘completion_tokens’: 5, ‘prompt_tokens’: 35, ‘total_tokens’: 40}, ‘model_name’: ‘gpt-3.5-turbo’, ‘system_fingerprint’: None, ‘finish_reason’: ‘stop’, ‘logprobs’: None}, id&#x3D;’run-bf0dba2c-930d-4166-b22b-5bd068fb8998-0’), HumanMessage(content&#x3D;”What’s my name?”), AIMessage(content&#x3D;’Your name is Pierce.’, response_metadata&#x3D;{‘token_usage’: {‘completion_tokens’: 5, ‘prompt_tokens’: 53, ‘total_tokens’: 58}, ‘model_name’: ‘gpt-3.5-turbo’, ‘system_fingerprint’: None, ‘finish_reason’: ‘stop’, ‘logprobs’: None}, id&#x3D;’run-59eb38b9-d329-44eb-9a4e-232e7ff8b997-0’)]),<br> ‘test002’: InMemoryChatMessageHistory(messages&#x3D;[HumanMessage(content&#x3D;”What’s my name?”), AIMessage(content&#x3D;”I’m sorry, but I do not have access to personal information about individuals unless it has been shared with me in the course of our conversation. I am designed to respect user privacy and confidentiality.”, response_metadata&#x3D;{‘token_usage’: {‘completion_tokens’: 39, ‘prompt_tokens’: 12, ‘total_tokens’: 51}, ‘model_name’: ‘gpt-3.5-turbo’, ‘system_fingerprint’: None, ‘finish_reason’: ‘stop’, ‘logprobs’: None}, id&#x3D;’run-be939cc3-29f3-4d9a-bdb6-21bed23cbd4d-0’)])}</p>
+</blockquote>
+<p>应该注意到，我们每次返回的AIMessage中现实的prompt_tokens都在增加，可见是将对话历史作为prompt的一部分传递给模型的。<br>那么会遇到另一个问题，如果一直保持着对话历史的全部内容，野蛮增长下很快对话历史就会占满模型的全部token。因此，我们需要有能力对对话历史做出掌控，例如根据时间顺序截取、根据对话提到的频率截取、对对话历史做总结等</p>
+<h3 id="4-进一步操控对话历史"><a href="#4-进一步操控对话历史" class="headerlink" title="4 进一步操控对话历史"></a>4 进一步操控对话历史</h3><p>我们模拟一个上述场景，将token数量限制为65，因而历史信息显示不全：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain_core.messages <span class="keyword">import</span> SystemMessage, trim_messages, AIMessage</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">trimmer = trim_messages(</span><br><span class="line">    max_tokens=<span class="number">65</span>,</span><br><span class="line">    strategy=<span class="string">&quot;last&quot;</span>,</span><br><span class="line">    token_counter=llm,</span><br><span class="line">    include_system=<span class="literal">True</span>,</span><br><span class="line">    allow_partial=<span class="literal">False</span>,</span><br><span class="line">    start_on=<span class="string">&quot;human&quot;</span>,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">messages = [</span><br><span class="line">    SystemMessage(content=<span class="string">&quot;you&#x27;re a good assistant&quot;</span>),</span><br><span class="line">    HumanMessage(content=<span class="string">&quot;hi! I&#x27;m bob&quot;</span>),</span><br><span class="line">    AIMessage(content=<span class="string">&quot;hi!&quot;</span>),</span><br><span class="line">    HumanMessage(content=<span class="string">&quot;I like vanilla ice cream&quot;</span>),</span><br><span class="line">    AIMessage(content=<span class="string">&quot;nice&quot;</span>),</span><br><span class="line">    HumanMessage(content=<span class="string">&quot;whats 2 + 2&quot;</span>),</span><br><span class="line">    AIMessage(content=<span class="string">&quot;4&quot;</span>),</span><br><span class="line">    HumanMessage(content=<span class="string">&quot;thanks&quot;</span>),</span><br><span class="line">    AIMessage(content=<span class="string">&quot;no problem!&quot;</span>),</span><br><span class="line">    HumanMessage(content=<span class="string">&quot;having fun?&quot;</span>),</span><br><span class="line">    AIMessage(content=<span class="string">&quot;yes!&quot;</span>),</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">trimmer.invoke(messages)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>[SystemMessage(content&#x3D;”you’re a good assistant”),<br> HumanMessage(content&#x3D;’whats 2 + 2’),<br> AIMessage(content&#x3D;’4’),<br> HumanMessage(content&#x3D;’thanks’),<br> AIMessage(content&#x3D;’no problem!’),<br> HumanMessage(content&#x3D;’having fun?’),<br> AIMessage(content&#x3D;’yes!’)]</p>
+</blockquote>
+<p>这里就是我们之前提到的按时间顺序截取了，其中设置了策略为“last”；此外，设置了开头的系统信息不被丢弃，且保存的对话总是以人类信息开始。这时我们分别问2+2之前的问题和之后的问题，可看到区别：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> operator <span class="keyword">import</span> itemgetter</span><br><span class="line"><span class="keyword">from</span> langchain_core.prompts <span class="keyword">import</span> ChatPromptTemplate, MessagesPlaceholder</span><br><span class="line"><span class="keyword">from</span> langchain_core.runnables <span class="keyword">import</span> RunnablePassthrough</span><br><span class="line"></span><br><span class="line">prompt = ChatPromptTemplate.from_messages(</span><br><span class="line">    [</span><br><span class="line">        (</span><br><span class="line">            <span class="string">&quot;system&quot;</span>,</span><br><span class="line">            <span class="string">&quot;You are a helpful assistant. Answer all questions to the best of your ability in &#123;language&#125;.&quot;</span>,</span><br><span class="line">        ),</span><br><span class="line">        MessagesPlaceholder(variable_name=<span class="string">&quot;messages&quot;</span>),</span><br><span class="line">    ]</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">chain = (</span><br><span class="line">    RunnablePassthrough.assign(messages=itemgetter(<span class="string">&quot;messages&quot;</span>) | trimmer)</span><br><span class="line">    | prompt</span><br><span class="line">    | llm</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">response = chain.invoke(</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="string">&quot;messages&quot;</span>: messages + [HumanMessage(content=<span class="string">&quot;what&#x27;s my name?&quot;</span>)],</span><br><span class="line">        <span class="string">&quot;language&quot;</span>: <span class="string">&quot;English&quot;</span>,</span><br><span class="line">    &#125;</span><br><span class="line">)</span><br><span class="line">response.content</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>“I’m sorry, but I don’t have access to personal information, so I don’t know your name.”</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">response = chain.invoke(</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="string">&quot;messages&quot;</span>: messages + [HumanMessage(content=<span class="string">&quot;what math problem did i ask&quot;</span>)],</span><br><span class="line">        <span class="string">&quot;language&quot;</span>: <span class="string">&quot;English&quot;</span>,</span><br><span class="line">    &#125;</span><br><span class="line">)</span><br><span class="line">response.content</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>‘You asked what is 2 + 2.’</p>
+</blockquote>
+<p>可以看到，之前抛弃掉的信息模型不能再看到，但尚未抛弃的是可以看到的</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">with_message_history = RunnableWithMessageHistory(</span><br><span class="line">    chain,</span><br><span class="line">    get_session_history,</span><br><span class="line">    input_messages_key=<span class="string">&quot;messages&quot;</span>,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">config = &#123;<span class="string">&quot;configurable&quot;</span>: &#123;<span class="string">&quot;session_id&quot;</span>: <span class="string">&quot;newHistory&quot;</span>&#125;&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">response = with_message_history.invoke(</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="string">&quot;messages&quot;</span>: messages + [HumanMessage(content=<span class="string">&quot;whats my name?&quot;</span>)],</span><br><span class="line">        <span class="string">&quot;language&quot;</span>: <span class="string">&quot;English&quot;</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">    config=config,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">response.content</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Parent run 87a69d25-9527-4b21-abf0-03f319245768 not found for run 96ba26e2-7c6c-4906-88da-84ecfb3b1665. Treating as a root run.<br>“I’m sorry, but I don’t have access to personal information.”</p>
+</blockquote>
+<p>我们当然知道模型已经无法得知我们的名字这一事实了，但不要忘记询问名字这一轮对话现在也加入了内存，顶掉了最前面关于2+2的对话记忆！</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">response = with_message_history.invoke(</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="string">&quot;messages&quot;</span>: [HumanMessage(content=<span class="string">&quot;what math problem did i ask?&quot;</span>)],</span><br><span class="line">        <span class="string">&quot;language&quot;</span>: <span class="string">&quot;English&quot;</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">    config=config,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">response.content</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Parent run 88f791be-b831-4849-b951-d41d23e573eb not found for run 357a5dcd-17be-44bf-aa73-39e94e414db7. Treating as a root run.<br>“I’m sorry, but I don’t have access to that information. Please let me know what math problem you would like assistance with and I’ll do my best to help you.”</p>
+</blockquote>
+<h3 id="5-流式输出"><a href="#5-流式输出" class="headerlink" title="5 流式输出"></a>5 流式输出</h3><p>最后，模拟网页版ChatGPT回答问题时的流式输出样式：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">config = &#123;<span class="string">&quot;configurable&quot;</span>: &#123;<span class="string">&quot;session_id&quot;</span>: <span class="string">&quot;streaming&quot;</span>&#125;&#125;</span><br><span class="line"><span class="keyword">for</span> r <span class="keyword">in</span> with_message_history.stream(</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="string">&quot;messages&quot;</span>: [HumanMessage(content=<span class="string">&quot;hi! I&#x27;m todd. tell me a joke&quot;</span>)],</span><br><span class="line">        <span class="string">&quot;language&quot;</span>: <span class="string">&quot;English&quot;</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">    config=config,</span><br><span class="line">):</span><br><span class="line">    <span class="built_in">print</span>(r.content, end=<span class="string">&quot;|&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>Parent run b95fdd59-d985-4944-bdec-ba12f5a76005 not found for run 5c7c9ba4-3de8-450d-8d2d-0f8c3e7b5068. Treating as a root run.<br>|Hi| Todd|!| Sure|,| here|’s| a| joke| for| you|:<br>|Why| don|’t| skeletons| fight| each| other|?<br>|They| don|’t| have| the| guts|!||</p>
+</blockquote>
+<p>所有chain都暴露了<code>.stream</code>方法，而使用消息历史记录的chain也不例外。可以简单地使用该方法来获取流式响应。</p>
+
+    </div>
+    <p class="eof">-- EOF --</p>
+    <p class="post-meta">
+        <span class="post-cat">分类：
+            <a class="cat-link" href="/categories/Python-AI/">Python AI</a>
+        </span>
+        <span class="post-tags">
+            标签：
+            
+    
+        <a href="/tags/Python/" title="Python">Python</a> / 
+    
+        <a href="/tags/AI/" title="AI">AI</a> / 
+    
+        <a href="/tags/LangChain/" title="LangChain">LangChain</a> / 
+    
+        <a href="/tags/Agent/" title="Agent">Agent</a>
+    
+
+        </span>
+    </p>
+</article>
+<!-- 分享按钮 -->
+
+  <div class="article-share clearfix text-center">
+    <div class="share-area">
+      <span class="share-txt">分享到：</span>
+      <a href="javascript: window.open('http://service.weibo.com/share/share.php?url=' + encodeURIComponent(location.href) + '&title=' + document.title + '&language=zh_cn');" class="share-icon weibo"></a>
+      <a href="javascript: alert('请复制链接到微信并发送');" class="share-icon wechat"></a>
+      <a href="javascript: window.open('http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=' + encodeURIComponent(location.href) + '&title=' + document.title);" class="share-icon qqzone"></a>
+      <a href="javascript: window.open('http://connect.qq.com/widget/shareqq/index.html?url=' + encodeURIComponent(location.href) + '&desc=Jelon个人博客&title=' + document.title + '&callback=' + encodeURIComponent(location.href));" class="share-icon qq"></a>
+      <a href="javascript: window.open('http://shuo.douban.com/!service/share?href=' + encodeURIComponent(location.href) + '&name=' + document.title + '&text=' + document.title);" class="share-icon douban"></a>
+    </div>
+  </div>
+
+
+<!-- 上一篇/下一篇 -->
+
+<!-- 文章评论 -->
+
+  
+<script src="/js/comment.js?v=1731332381076.js"></script>
+
+  <div id="comments" class="comment">
+    <!--
+    <div class="sign-bar">
+      GitHub 已登录!
+      <span class="sign-link">登出</span>
+    </div>
+    <section class="box">
+      <div class="com-avatar"><img src="/img/jelon.jpg" alt="avatar"></div>
+      <div class="com-text">
+        <div class="main">
+          <textarea class="text-area-edited show" placeholder="欢迎评论！"></textarea>
+          <div class="text-area-preview"></div>
+        </div>
+        <div class="switch">
+          <div class="switch-item on">编辑</div>
+          <div class="switch-item">预览</div>
+        </div>
+        <div class="button">提交</div>
+      </div>
+    </section>
+    <section class="tips">注：评论支持 markdown 语法！</section>
+    <section class="list-wrap">
+      <ul class="list">
+        <li>
+          <div class="user-avatar">
+            <a href="/">
+              <img src="/img/jelon.jpg" alt="user-avatar">
+            </a>
+          </div>
+          <div class="user-comment">
+            <div class="user-comment-header">
+              <span class="post-name">张德龙</span>
+              <span class="post-time">2017年12月12日</span>
+              <span class="like liked">已赞</span>
+              <span class="like-num">2</span>
+            </div>
+            <div class="user-comment-body">333333</div>
+          </div>
+        </li>
+        <li>
+          <div class="user-avatar">
+            <a href="/">
+              <img src="/img/jelon.jpg" alt="user-avatar">
+            </a>
+          </div>
+          <div class="user-comment">
+            <div class="user-comment-header">
+              <span class="post-name">刘德华</span>
+              <span class="post-time">2017年12月12日</span>
+              <span class="like">点赞</span>
+              <span class="like-num">2</span>
+            </div>
+            <div class="user-comment-body">vvvvv</div>
+          </div>
+        </li>
+      </ul>
+      <div class="page-nav">
+        <a href="javascript: void(0);" class="item">1</a>
+        <a href="javascript: void(0);" class="item">2</a>
+        <a href="javascript: void(0);" class="item current">3</a>
+      </div>
+    </section>
+    -->
+  </div>
+  <script>
+  JELON.Comment({
+    container: 'comments',
+    label: 'langchain_chatrobot' || '2024/06/30/langchain_chatrobot/',
+    owner: '',
+    repo: '',
+    clientId: '',
+    clientSecret: ''
+  });
+  </script>
+
+
+
+            </div>
+        </section>
+        <!-- 侧栏部分 -->
+<aside class="sidebar">
+    
+    <section class="widget">
+        <h3 class="widget-hd"><strong>文章搜索</strong></h3>
+        <div class="search-form">
+  <form
+    id="searchForm"
+    method="GET"
+    action="https://www.baidu.com/s"
+    ectype="application/x-www-form-urlencoded"
+    target="_blank"
+    autocomplete="false"
+    onsubmit="javascript: return false;">
+    <input
+      id="searchKeyword"
+      type="text"
+      class="form-control"
+      placeholder="输入关键字搜索"
+      autocomplete="false"
+    />
+    <input id="searchKeywordHidden" type="hidden" name="wd" />
+    <input id="searchButton" class="btn" type="submit" value="搜索" />
+  </form>
+</div>
+    </section>
+    
+
+    <section class="widget">
+        <h3 class="widget-hd"><strong>文章分类</strong></h3>
+        <!-- 文章分类 -->
+<ul class="widget-bd">
+    
+    <li>
+        <a href="/categories/Python-AI/">Python AI</a>
+        <span class="badge">(1)</span>
+    </li>
+    
+</ul>
+    </section>
+
+    
+    <section class="widget">
+        <h3 class="widget-hd"><strong>热门标签</strong></h3>
+        <!-- 文章标签 -->
+<div class="widget-bd tag-wrap">
+  
+    <a class="tag-item" href="/tags/Python/" title="Python">Python (1)</a>
+  
+    <a class="tag-item" href="/tags/AI/" title="AI">AI (1)</a>
+  
+    <a class="tag-item" href="/tags/LangChain/" title="LangChain">LangChain (1)</a>
+  
+    <a class="tag-item" href="/tags/Agent/" title="Agent">Agent (1)</a>
+  
+</div>
+    </section>
+    
+
+    
+    <!-- 我的微博 -->
+    <section class="widget">
+        <h3 class="widget-hd"><strong>我的微博</strong></h3>
+        <div class="widget-bd" style="position: relative;">
+  <div id="myWeiboLoading" class="text-center" style="position:absolute;top:0;left:0;right:0;bottom:0;line-height:50px;font-size:12px;background-color:#fff;z-index:9;">微博加载中...</div>
+  <iframe id="myWeibo" width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=1&isTitle=0&noborder=0&isWeibo=1&isFans=0&uid=2376003112&verifier=796ea597&dpc=1"></iframe>
+  <script>
+  (function () {
+    var oMyWeibo = document.getElementById('myWeibo');
+    var oMyWeiboLoading = document.getElementById('myWeiboLoading');
+    var isIE = /msie/i.test(navigator.userAgent) && !window.opera;
+    var timer = null;
+    if (isIE) {
+      oMyWeibo.onreadystatechange = function(){
+        if(oMyWeibo.readyState === 'loaded' || oMyWeibo.readyState === 'complete'){
+          timer = setTimeout(function () {
+            oMyWeiboLoading.parentNode.removeChild(oMyWeiboLoading);
+            timer = null;
+          }, 300);
+        }
+      };
+    } else {
+      oMyWeibo.onload = function () {
+        timer = setTimeout(function () {
+          oMyWeiboLoading.parentNode.removeChild(oMyWeiboLoading);
+          timer = null;
+        }, 300);
+      };
+    }
+  })();
+  </script>
+</div>
+    </section>
+    
+
+    
+</aside>
+<!-- / 侧栏部分 -->
+    </div>
+
+    <!-- 博客底部 -->
+    <footer class="footer">
+    &copy;
+    
+        2014-2024
+    
+
+    <a href="/">Pierce Love You</a>
+</footer>
+<div class="back-to-top" id="JELON__backToTop" title="返回顶部">返回顶部</div>
+
+    <!--博客js脚本 -->
+    <!-- 这里放网站js脚本 -->
+
+<script src="/js/main.js?v=1731332381084.js"></script>
+
+
+</body>
+</html>
