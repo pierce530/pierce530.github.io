@@ -709,13 +709,6 @@ hr {
 .profile .feeds .sns .sinaweibo:hover {
   color: #e6162d;
 }
-.profile .feeds .sns .csdn b {
-  color: #ff5e52;
-  font-size: 14px;
-}
-.profile .feeds .sns .csdn:hover {
-  color: #ff5e52;
-}
 .profile .feeds .sns .bilibili b {
   color: #1faeff;
   font-size: 14px;
