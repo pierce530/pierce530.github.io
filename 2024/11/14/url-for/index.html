@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" >
+    <meta http-equiv="X-UA-Compatible" content="IE=11,IE=10,IE=9,IE=8" >
+    <meta name="baidu-site-verification" content="dIcXMeY8Ya" />
+    
+    <title>EJS中url_for()使用 | Pierce小屋</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" >
+    <meta name="keywords" content="Pierce, Web, 章靖宇, 开发" >
+    <meta name="description" content="Pierce的个人博客" >
+
+    
+    <link rel="alternative" href="/atom.xml" title="Pierce小屋" type="application/atom+xml" >
+    
+    
+    <link rel="icon" href="/img/favicon.ico" >
+    
+    
+<link rel="stylesheet" href="/css/style.css?v=1731581183858.css">
+
+    <!--[if lt IE 9]>
+    
+<script src="/js/html5.js"></script>
+
+    <![endif]-->
+    
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="home">
+    <!--[if lt IE 9]>
+    <div class="browsehappy">
+        当前网页 <strong>不支持</strong>
+        你正在使用的浏览器. 为了正常的访问, 请 <a target="_blank" rel="noopener" href="http://browsehappy.com/">升级你的浏览器</a>.
+    </div>
+    <![endif]-->
+
+    <!-- 博客头部 -->
+    <header class="header">
+    <section class="container header-main">
+        <div class="logo">
+            <a href="/">
+                <div class="cover">
+                    <span class="name">Pierce小屋</span>
+                    <span class="description">欢迎访问</span>
+                </div>
+            </a>
+        </div>
+        <div class="dropnav iconfont icon-nav" id="JELON__btnDropNav"></div>
+        <ul class="menu hidden" id="JELON__menu">
+            
+            <li rel="/2024/11/14/url-for/index.html" class="item ">
+                <a href="/" title="首页" class="iconfont icon-home">&nbsp;首页</a>
+            </li>
+            
+            <li rel="/2024/11/14/url-for/index.html" class="item ">
+                <a href="/archives/" title="归档" class="iconfont icon-archives">&nbsp;归档</a>
+            </li>
+            
+            <li rel="/2024/11/14/url-for/index.html" class="item ">
+                <a href="/about/" title="关于" class="iconfont icon-staff">&nbsp;关于</a>
+            </li>
+            
+            <li rel="/2024/11/14/url-for/index.html" class="item ">
+                <a href="/comment/" title="留言" class="iconfont icon-comment">&nbsp;留言</a>
+            </li>
+            
+        </ul>
+        <div class="profile clearfix">
+            <div class="feeds fl">
+                
+                
+                <p class="links">
+                    
+                        <a href="https://github.com/pierce530" target="_blank">Github</a>
+                        |
+                    
+                        <a href="https://blog.csdn.net/qq_43668800" target="_blank">CSDN</a>
+                        
+                    
+                </p>
+                <p class="sns">
+                    
+                        <a href="https://weibo.com/u/7756586759" class="sinaweibo" target="_blank"><b>■</b> 新浪微博</a>
+                    
+                        <a href="https://space.bilibili.com/351790592" class="bilibili" target="_blank"><b>■</b> bilibili</a>
+                    
+                    <a href="javascript: void(0);" class="wechat">
+                        <b>■</b>
+                        公众号
+                        <span class="popover">
+                            <img src="/img/wechat_mp.jpg" width="120" height="120" alt="我的微信订阅号">
+                            <i class="arrow"></i>
+                        </span>
+                    </a>
+                </p>
+                
+            </div>
+            <div class="avatar fr">
+                <img src="/img/avatar.jpg" alt="avatar" title="Pierce" >
+            </div>
+        </div>
+    </section>
+</header>
+
+
+    <!-- 博客正文 -->
+    <div class="container body clearfix">
+        <section class="content">
+            <div class="content-main widget">
+                <!-- 文章页 -->
+<!-- 文章 -->
+<article class="post article">
+    <header class="text-center">
+        <h3 class="post-title"><span>EJS中url_for()使用</span></h3>
+    </header>
+    <p class="post-meta text-center">
+        Pierce 发表于
+        <time datetime="2024-11-14T10:20:39.000Z">2024-11-14</time>
+    </p>
+    <div id="JELON__articlePostContent" class="post-content">
+        <p>在编写Hexo博客主题时，发现原主题设置每篇博客有一个封面图，如图所示：</p>
+<p><img src="/./url-for/01.png" alt="每篇博客的封面图"></p>
+<p>其图片源是这样设置的：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;post-thumbnail&quot;</span> <span class="attr">data-img</span>=<span class="string">&quot;&lt;%- post.photos[0] %&gt;&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;&lt;%= post.permalink %&gt;&quot;</span> <span class="attr">title</span>=<span class="string">&quot;&lt;%= post.title %&gt;&quot;</span>&gt;</span></span><br><span class="line"></span><br><span class="line">      &lt;% if (post.thumbnail) &#123; %&gt;</span><br><span class="line">          <span class="comment">&lt;!--</span></span><br><span class="line"><span class="comment">          &lt;%- image_tag(post.thumbnail, &#123; class: &quot;thumbnail&quot; &#125;) %&gt;</span></span><br><span class="line"><span class="comment">          --&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">img</span> <span class="attr">class</span>=<span class="string">&quot;thumbnail&quot;</span> <span class="attr">src</span>=<span class="string">&quot;&lt;%- url_for(&#x27;img/default.png&#x27;) %&gt;&quot;</span> <span class="attr">data-echo</span>=<span class="string">&quot;&lt;%= post.thumbnail %&gt;&quot;</span> <span class="attr">alt</span>=<span class="string">&quot;&lt;%= post.title %&gt;&quot;</span> &gt;</span></span><br><span class="line">      &lt;% &#125; else if (post.photos.length) &#123; %&gt;</span><br><span class="line">          <span class="tag">&lt;<span class="name">img</span> <span class="attr">class</span>=<span class="string">&quot;thumbnail&quot;</span> <span class="attr">src</span>=<span class="string">&quot;&lt;%- url_for(&#x27;img/default.png&#x27;) %&gt;&quot;</span> <span class="attr">data-echo</span>=<span class="string">&quot;&lt;%= post.photos[0] %&gt;&quot;</span> <span class="attr">alt</span>=<span class="string">&quot;&lt;%= post.title %&gt;&quot;</span> &gt;</span></span><br><span class="line">      &lt;% &#125; else if (theme.CDN) &#123; %&gt;</span><br><span class="line">          <span class="tag">&lt;<span class="name">img</span> <span class="attr">class</span>=<span class="string">&quot;thumbnail&quot;</span> <span class="attr">src</span>=<span class="string">&quot;&lt;%- url_for(&#x27;img/default.png&#x27;) %&gt;&quot;</span> <span class="attr">data-echo</span>=<span class="string">&quot;&lt;%- url_for(theme.CDN + &#x27;thumbnail/&#x27; + date(post.date, &#x27;YYYY-MM-DD&#x27;).charAt(date(post.date, &#x27;YYYY-MM-DD&#x27;).length - 1)  + &#x27;.jpg&#x27;) %&gt;&quot;</span> <span class="attr">alt</span>=<span class="string">&quot;默认配图&quot;</span> &gt;</span></span><br><span class="line">      &lt;% &#125; else  &#123; %&gt;</span><br><span class="line">          <span class="tag">&lt;<span class="name">img</span> <span class="attr">class</span>=<span class="string">&quot;thumbnail&quot;</span> <span class="attr">src</span>=<span class="string">&quot;&lt;%- url_for(&#x27;img/default.png&#x27;) %&gt;&quot;</span> <span class="attr">data-echo</span>=<span class="string">&quot;&lt;%- url_for(&#x27;img/thumbnail/&#x27; + date(post.date, &#x27;YYYY-MM-DD&#x27;).charAt(date(post.date, &#x27;YYYY-MM-DD&#x27;).length - 1)  + &#x27;.jpg&#x27;) %&gt;&quot;</span> <span class="attr">alt</span>=<span class="string">&quot;默认配图&quot;</span> &gt;</span></span><br><span class="line">      &lt;% &#125; %&gt;</span><br><span class="line">  <span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>其中 <code>post.thumbnail</code> 是图片相对于文档的相对路径，如 <code>img/thumbnail/Bert.jpg</code> ；者在大多数情况下可以成功展示图片，因为拼接完成后url变为 <code>http://localhost:4000/img/thumbnail/Bert.jpg</code>；但是当用户选择根据分类、标签筛选博文时，url本身变为 <code>https://pierce530.github.io/categories/Python/</code>，此时图片的地址被解析为 <code>https://pierce530.github.io/categories/Python/img/thumbnail/Bert.jpg</code>，显然无法正确获取图片。</p>
+<p><img src="/./url-for/02.png" alt="图片加载失败情况"></p>
+<p>思考之后，为原先的代码 <code>post.thumbnail</code> 套上函数 <code>url_for()</code>，如下所示：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;post-thumbnail&quot;</span> <span class="attr">data-img</span>=<span class="string">&quot;&lt;%- post.photos[0] %&gt;&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;&lt;%= post.permalink %&gt;&quot;</span> <span class="attr">title</span>=<span class="string">&quot;&lt;%= post.title %&gt;&quot;</span>&gt;</span></span><br><span class="line"></span><br><span class="line">      &lt;% if (post.thumbnail) &#123; %&gt;</span><br><span class="line">          <span class="comment">&lt;!--</span></span><br><span class="line"><span class="comment">          &lt;%- image_tag(post.thumbnail, &#123; class: &quot;thumbnail&quot; &#125;) %&gt;</span></span><br><span class="line"><span class="comment">          --&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">img</span> <span class="attr">class</span>=<span class="string">&quot;thumbnail&quot;</span> <span class="attr">src</span>=<span class="string">&quot;&lt;%- url_for(&#x27;img/default.png&#x27;) %&gt;&quot;</span> <span class="attr">data-echo</span>=<span class="string">&quot;&lt;%= url_for(post.thumbnail) %&gt;&quot;</span> <span class="attr">alt</span>=<span class="string">&quot;&lt;%= post.title %&gt;&quot;</span> &gt;</span></span><br><span class="line">      &lt;% &#125; else if (post.photos.length) &#123; %&gt;</span><br><span class="line">          <span class="tag">&lt;<span class="name">img</span> <span class="attr">class</span>=<span class="string">&quot;thumbnail&quot;</span> <span class="attr">src</span>=<span class="string">&quot;&lt;%- url_for(&#x27;img/default.png&#x27;) %&gt;&quot;</span> <span class="attr">data-echo</span>=<span class="string">&quot;&lt;%= url_for(post.photos[0]) %&gt;&quot;</span> <span class="attr">alt</span>=<span class="string">&quot;&lt;%= post.title %&gt;&quot;</span> &gt;</span></span><br><span class="line">      &lt;% &#125; else if (theme.CDN) &#123; %&gt;</span><br><span class="line">          <span class="tag">&lt;<span class="name">img</span> <span class="attr">class</span>=<span class="string">&quot;thumbnail&quot;</span> <span class="attr">src</span>=<span class="string">&quot;&lt;%- url_for(&#x27;img/default.png&#x27;) %&gt;&quot;</span> <span class="attr">data-echo</span>=<span class="string">&quot;&lt;%- url_for(theme.CDN + &#x27;thumbnail/&#x27; + date(post.date, &#x27;YYYY-MM-DD&#x27;).charAt(date(post.date, &#x27;YYYY-MM-DD&#x27;).length - 1)  + &#x27;.jpg&#x27;) %&gt;&quot;</span> <span class="attr">alt</span>=<span class="string">&quot;默认配图&quot;</span> &gt;</span></span><br><span class="line">      &lt;% &#125; else  &#123; %&gt;</span><br><span class="line">          <span class="tag">&lt;<span class="name">img</span> <span class="attr">class</span>=<span class="string">&quot;thumbnail&quot;</span> <span class="attr">src</span>=<span class="string">&quot;&lt;%- url_for(&#x27;img/default.png&#x27;) %&gt;&quot;</span> <span class="attr">data-echo</span>=<span class="string">&quot;&lt;%- url_for(&#x27;img/thumbnail/&#x27; + date(post.date, &#x27;YYYY-MM-DD&#x27;).charAt(date(post.date, &#x27;YYYY-MM-DD&#x27;).length - 1)  + &#x27;.jpg&#x27;) %&gt;&quot;</span> <span class="attr">alt</span>=<span class="string">&quot;默认配图&quot;</span> &gt;</span></span><br><span class="line">      &lt;% &#125; %&gt;</span><br><span class="line">  <span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>此时图片可正常解析：</p>
+<p><img src="/./url-for/03.png" alt="图片可加载情况"></p>
+<p>究其原因，是因为在config.yml中进行了设置：</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># URL</span></span><br><span class="line"><span class="comment">## Set your site url here. For example, if you use GitHub Page, set url as &#x27;https://username.github.io/project&#x27;</span></span><br><span class="line"><span class="attr">url:</span> <span class="string">https://pierce530.github.io</span></span><br><span class="line"><span class="attr">root:</span> <span class="string">/</span></span><br></pre></td></tr></table></figure>
+
+<p>同时，<code>url_for()</code> 是Hexo的一个辅助函数，它处理路径时，会根据站点配置和当前页面的路径来自动计算资源路径。其基本的计算原则是：</p>
+<ol>
+<li>绝对路径：如果传入<code>url_for()</code>的路径已经是绝对路径（即以 &#x2F; 开头），那么它会被直接作为根目录下的路径处理，忽略当前页面路径。</li>
+<li>相对路径：如果传入<code>url_for()</code>的路径是相对路径（如 img&#x2F;thumbnail&#x2F;Bert.jpg），Hexo 会把它转化为站点根目录下的路径，而不受当前页面的子路径影响。实际上，url_for 会“修正”这些路径，将它们从根目录（<code>https://pierce530.github.io/</code>）开始。</li>
+</ol>
+<p>当在模板中使用<code>url_for(post.thumbnail)</code> 时，Hexo内部会判断是否传入的是相对路径。如果是，它会将路径解析为相对于站点根目录的路径，而不会考虑当前所处的子目录（如 &#x2F;tags&#x2F;）。所以，即使当前页面 URL 是 <code>https://pierce530.github.io/tags/</code>，Hexo 会自动将相对路径当作站点根目录的路径来解析，避免了错误的路径。</p>
+
+    </div>
+    <p class="eof">-- EOF --</p>
+    <p class="post-meta">
+        <span class="post-cat">分类：
+            <a class="cat-link" href="/categories/JavaScript/">JavaScript</a>
+        </span>
+        <span class="post-tags">
+            标签：
+            
+    
+        <a href="/tags/WEB%E6%8A%80%E6%9C%AF/" title="WEB技术">WEB技术</a> / 
+    
+        <a href="/tags/%E5%89%8D%E7%AB%AF/" title="前端">前端</a> / 
+    
+        <a href="/tags/JavaScript/" title="JavaScript">JavaScript</a>
+    
+
+        </span>
+    </p>
+</article>
+<!-- 分享按钮 -->
+
+  <div class="article-share clearfix text-center">
+    <div class="share-area">
+      <span class="share-txt">分享到：</span>
+      <a href="javascript: window.open('http://service.weibo.com/share/share.php?url=' + encodeURIComponent(location.href) + '&title=' + document.title + '&language=zh_cn');" class="share-icon weibo"></a>
+      <a href="javascript: alert('请复制链接到微信并发送');" class="share-icon wechat"></a>
+      <a href="javascript: window.open('http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=' + encodeURIComponent(location.href) + '&title=' + document.title);" class="share-icon qqzone"></a>
+      <a href="javascript: window.open('http://connect.qq.com/widget/shareqq/index.html?url=' + encodeURIComponent(location.href) + '&desc=Jelon个人博客&title=' + document.title + '&callback=' + encodeURIComponent(location.href));" class="share-icon qq"></a>
+      <a href="javascript: window.open('http://shuo.douban.com/!service/share?href=' + encodeURIComponent(location.href) + '&name=' + document.title + '&text=' + document.title);" class="share-icon douban"></a>
+    </div>
+  </div>
+
+
+<!-- 上一篇/下一篇 -->
+
+<div class="article-nav clearfix">
+    
+    <span class="prev fl">
+        上一篇<br >
+        <a href="javascript: void(0);">没有上一篇了</a>
+    </span>
+    
+
+    
+    <span class="next fr">
+        下一篇<br >
+        <a href="/2024/06/30/langchain_chatrobot/">
+            
+                LangChain 实现聊天机器人基础
+            
+        </a>
+    </span>
+    
+</div>
+
+<!-- 文章评论 -->
+
+  
+<script src="/js/comment.js?v=1731581183841.js"></script>
+
+  <div id="comments" class="comment">
+    <!--
+    <div class="sign-bar">
+      GitHub 已登录!
+      <span class="sign-link">登出</span>
+    </div>
+    <section class="box">
+      <div class="com-avatar"><img src="/img/jelon.jpg" alt="avatar"></div>
+      <div class="com-text">
+        <div class="main">
+          <textarea class="text-area-edited show" placeholder="欢迎评论！"></textarea>
+          <div class="text-area-preview"></div>
+        </div>
+        <div class="switch">
+          <div class="switch-item on">编辑</div>
+          <div class="switch-item">预览</div>
+        </div>
+        <div class="button">提交</div>
+      </div>
+    </section>
+    <section class="tips">注：评论支持 markdown 语法！</section>
+    <section class="list-wrap">
+      <ul class="list">
+        <li>
+          <div class="user-avatar">
+            <a href="/">
+              <img src="/img/jelon.jpg" alt="user-avatar">
+            </a>
+          </div>
+          <div class="user-comment">
+            <div class="user-comment-header">
+              <span class="post-name">张德龙</span>
+              <span class="post-time">2017年12月12日</span>
+              <span class="like liked">已赞</span>
+              <span class="like-num">2</span>
+            </div>
+            <div class="user-comment-body">333333</div>
+          </div>
+        </li>
+        <li>
+          <div class="user-avatar">
+            <a href="/">
+              <img src="/img/jelon.jpg" alt="user-avatar">
+            </a>
+          </div>
+          <div class="user-comment">
+            <div class="user-comment-header">
+              <span class="post-name">刘德华</span>
+              <span class="post-time">2017年12月12日</span>
+              <span class="like">点赞</span>
+              <span class="like-num">2</span>
+            </div>
+            <div class="user-comment-body">vvvvv</div>
+          </div>
+        </li>
+      </ul>
+      <div class="page-nav">
+        <a href="javascript: void(0);" class="item">1</a>
+        <a href="javascript: void(0);" class="item">2</a>
+        <a href="javascript: void(0);" class="item current">3</a>
+      </div>
+    </section>
+    -->
+  </div>
+  <script>
+  JELON.Comment({
+    container: 'comments',
+    label: 'url-for' || '2024/11/14/url-for/',
+    owner: '',
+    repo: '',
+    clientId: '',
+    clientSecret: ''
+  });
+  </script>
+
+
+
+            </div>
+        </section>
+        <!-- 侧栏部分 -->
+<aside class="sidebar">
+    
+    <section class="widget">
+        <h3 class="widget-hd"><strong>文章搜索</strong></h3>
+        <div class="search-form">
+  <form
+    id="searchForm"
+    method="GET"
+    action="https://www.baidu.com/s"
+    ectype="application/x-www-form-urlencoded"
+    target="_blank"
+    autocomplete="false"
+    onsubmit="javascript: return false;">
+    <input
+      id="searchKeyword"
+      type="text"
+      class="form-control"
+      placeholder="输入关键字搜索"
+      autocomplete="false"
+    />
+    <input id="searchKeywordHidden" type="hidden" name="wd" />
+    <input id="searchButton" class="btn" type="submit" value="搜索" />
+  </form>
+</div>
+    </section>
+    
+
+    <section class="widget">
+        <h3 class="widget-hd"><strong>文章分类</strong></h3>
+        <!-- 文章分类 -->
+<ul class="widget-bd">
+    
+    <li>
+        <a href="/categories/Python/">Python</a>
+        <span class="badge">(2)</span>
+    </li>
+    
+    <li>
+        <a href="/categories/JavaScript/">JavaScript</a>
+        <span class="badge">(1)</span>
+    </li>
+    
+</ul>
+    </section>
+
+    
+    <section class="widget">
+        <h3 class="widget-hd"><strong>热门标签</strong></h3>
+        <!-- 文章标签 -->
+<div class="widget-bd tag-wrap">
+  
+    <a class="tag-item" href="/tags/Python/" title="Python">Python (2)</a>
+  
+    <a class="tag-item" href="/tags/AI/" title="AI">AI (2)</a>
+  
+    <a class="tag-item" href="/tags/LangChain/" title="LangChain">LangChain (1)</a>
+  
+    <a class="tag-item" href="/tags/Agent/" title="Agent">Agent (1)</a>
+  
+    <a class="tag-item" href="/tags/Bert/" title="Bert">Bert (1)</a>
+  
+    <a class="tag-item" href="/tags/WEB%E6%8A%80%E6%9C%AF/" title="WEB技术">WEB技术 (1)</a>
+  
+    <a class="tag-item" href="/tags/%E5%89%8D%E7%AB%AF/" title="前端">前端 (1)</a>
+  
+    <a class="tag-item" href="/tags/JavaScript/" title="JavaScript">JavaScript (1)</a>
+  
+</div>
+    </section>
+    
+
+    
+
+    
+</aside>
+<!-- / 侧栏部分 -->
+    </div>
+
+    <!-- 博客底部 -->
+    <footer class="footer">
+    &copy;
+    
+        2014-2024
+    
+
+    <a href="/">Pierce Loves You</a>
+</footer>
+<div class="back-to-top" id="JELON__backToTop" title="返回顶部">返回顶部</div>
+
+    <!--博客js脚本 -->
+    <!-- 这里放网站js脚本 -->
+
+<script src="/js/main.js?v=1731581183860.js"></script>
+
+
+</body>
+</html>
