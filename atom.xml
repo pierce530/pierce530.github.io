@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Pierce小屋</title>
+  
+  <subtitle>欢迎访问</subtitle>
+  <link href="https://pierce530.github.io/atom.xml" rel="self"/>
+  
+  <link href="https://pierce530.github.io/"/>
+  <updated>2024-11-14T11:15:18.230Z</updated>
+  <id>https://pierce530.github.io/</id>
+  
+  <author>
+    <name>Pierce</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>EJS中url_for()使用</title>
+    <link href="https://pierce530.github.io/2024/11/14/url-for/"/>
+    <id>https://pierce530.github.io/2024/11/14/url-for/</id>
+    <published>2024-11-14T10:20:39.000Z</published>
+    <updated>2024-11-14T11:15:18.230Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;在编写Hexo博客主题时，发现原主题设置每篇博客有一个封面图，如图所示：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/2024/11/14/url-for/01.png&quot; alt=&quot;每篇博客的封面图&quot;&gt;&lt;/p&gt;
+&lt;p&gt;其图片源是这样设置的：&lt;/p&gt;
+&lt;figure class=&quot;h</summary>
+      
+    
+    
+    
+    <category term="JavaScript" scheme="https://pierce530.github.io/categories/JavaScript/"/>
+    
+    
+    <category term="WEB技术" scheme="https://pierce530.github.io/tags/WEB%E6%8A%80%E6%9C%AF/"/>
+    
+    <category term="前端" scheme="https://pierce530.github.io/tags/%E5%89%8D%E7%AB%AF/"/>
+    
+    <category term="JavaScript" scheme="https://pierce530.github.io/tags/JavaScript/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>LangChain 实现聊天机器人基础</title>
+    <link href="https://pierce530.github.io/2024/06/30/langchain_chatrobot/"/>
+    <id>https://pierce530.github.io/2024/06/30/langchain_chatrobot/</id>
+    <published>2024-06-29T16:00:00.000Z</published>
+    <updated>2024-11-13T08:35:44.225Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;&lt;strong&gt;项目的接口模型是GPT-3.5&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id=&quot;1-接入大模型&quot;&gt;&lt;a href=&quot;#1-接入大模型&quot; class=&quot;headerlink&quot; title=&quot;1 接入大模型&quot;&gt;&lt;/a&gt;1 接入大模型&lt;/h2&gt;&lt;figure class</summary>
+      
+    
+    
+    
+    <category term="Python" scheme="https://pierce530.github.io/categories/Python/"/>
+    
+    
+    <category term="Python" scheme="https://pierce530.github.io/tags/Python/"/>
+    
+    <category term="AI" scheme="https://pierce530.github.io/tags/AI/"/>
+    
+    <category term="LangChain" scheme="https://pierce530.github.io/tags/LangChain/"/>
+    
+    <category term="Agent" scheme="https://pierce530.github.io/tags/Agent/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>在Hugging Face上下载并微调Bert-base-Chinese</title>
+    <link href="https://pierce530.github.io/2023/07/25/bertbasechinese/"/>
+    <id>https://pierce530.github.io/2023/07/25/bertbasechinese/</id>
+    <published>2023-07-24T16:00:00.000Z</published>
+    <updated>2024-11-14T11:15:57.843Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;Hugging-Face&quot;&gt;&lt;a href=&quot;#Hugging-Face&quot; class=&quot;headerlink&quot; title=&quot;Hugging Face&quot;&gt;&lt;/a&gt;Hugging Face&lt;/h2&gt;&lt;p&gt;Hugging face 起初是一家总部位于纽约的聊天机器人</summary>
+      
+    
+    
+    
+    <category term="Python" scheme="https://pierce530.github.io/categories/Python/"/>
+    
+    
+    <category term="Python" scheme="https://pierce530.github.io/tags/Python/"/>
+    
+    <category term="AI" scheme="https://pierce530.github.io/tags/AI/"/>
+    
+    <category term="Bert" scheme="https://pierce530.github.io/tags/Bert/"/>
+    
+  </entry>
+  
+</feed>
