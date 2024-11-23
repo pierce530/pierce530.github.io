@@ -17,7 +17,7 @@
     <link rel="icon" href="/img/favicon.ico" >
     
     
-<link rel="stylesheet" href="/css/style.css?v=1731753543248.css">
+<link rel="stylesheet" href="/css/style.css?v=1732342550089.css">
 
     <!--[if lt IE 9]>
     
@@ -153,18 +153,12 @@
 
 <p>这里，BaseChatMessageHistory作为基类是一个抽象类，要实现任何一个对话历史存储，都要继承自该抽象类，并实现下列方法中的一个或多个：</p>
 <ol>
-<li><p>add_messages(): sync variant for bulk addition of messages</p>
-</li>
-<li><p>aadd_messages(): async variant for bulk addition of messages</p>
-</li>
-<li><p>messages(): sync variant for getting messages</p>
-</li>
-<li><p>aget_messages(): async variant for getting messages</p>
-</li>
-<li><p>clear(): sync variant for clearing messages</p>
-</li>
-<li><p>aclear(): async variant for clearing messages</p>
-</li>
+<li>add_messages(): sync variant for bulk addition of messages</li>
+<li>aadd_messages(): async variant for bulk addition of messages </li>
+<li>messages(): sync variant for getting messages</li>
+<li>aget_messages(): async variant for getting messages</li>
+<li>clear(): sync variant for clearing messages</li>
+<li>aclear(): async variant for clearing messages</li>
 </ol>
 <p>InMemoryChatMessageHistory()方法继承自抽象类并实现了上述方法</p>
 <p>这里get_session_history()方法确定如何获取需要的历史信息，session_id的设置用于区分不同的对话信息对于RunnableWithMessageHistory，其本质是一个Runnable，用于管理另一个Runnable的聊天消息历史记录。</p>
@@ -287,7 +281,7 @@
 <!-- 文章评论 -->
 
   
-<script src="/js/comment.js?v=1731753543227.js"></script>
+<script src="/js/comment.js?v=1732342550087.js"></script>
 
   <div id="comments" class="comment">
     <!--
@@ -410,7 +404,7 @@
     
     <li>
         <a href="/categories/Python/">Python</a>
-        <span class="badge">(2)</span>
+        <span class="badge">(3)</span>
     </li>
     
     <li>
@@ -427,13 +421,13 @@
         <!-- 文章标签 -->
 <div class="widget-bd tag-wrap">
   
-    <a class="tag-item" href="/tags/Python/" title="Python">Python (2)</a>
+    <a class="tag-item" href="/tags/Python/" title="Python">Python (3)</a>
   
-    <a class="tag-item" href="/tags/AI/" title="AI">AI (2)</a>
+    <a class="tag-item" href="/tags/AI/" title="AI">AI (3)</a>
   
-    <a class="tag-item" href="/tags/LangChain/" title="LangChain">LangChain (1)</a>
+    <a class="tag-item" href="/tags/LangChain/" title="LangChain">LangChain (2)</a>
   
-    <a class="tag-item" href="/tags/Agent/" title="Agent">Agent (1)</a>
+    <a class="tag-item" href="/tags/Agent/" title="Agent">Agent (2)</a>
   
     <a class="tag-item" href="/tags/WEB%E6%8A%80%E6%9C%AF/" title="WEB技术">WEB技术 (1)</a>
   
@@ -468,7 +462,7 @@
     <!--博客js脚本 -->
     <!-- 这里放网站js脚本 -->
 
-<script src="/js/main.js?v=1731753543249.js"></script>
+<script src="/js/main.js?v=1732342550091.js"></script>
 
 
 </body>

@@ -6,7 +6,7 @@
   <link href="https://pierce530.github.io/atom.xml" rel="self"/>
   
   <link href="https://pierce530.github.io/"/>
-  <updated>2024-11-14T11:15:18.230Z</updated>
+  <updated>2024-11-23T06:15:43.624Z</updated>
   <id>https://pierce530.github.io/</id>
   
   <author>
@@ -17,11 +17,39 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>LangChain个人学习笔记（一）</title>
+    <link href="https://pierce530.github.io/2024/11/23/langchain-1/"/>
+    <id>https://pierce530.github.io/2024/11/23/langchain-1/</id>
+    <published>2024-11-22T16:00:00.000Z</published>
+    <updated>2024-11-23T06:15:43.624Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;什么是LangChain&quot;&gt;&lt;a href=&quot;#什么是LangChain&quot; class=&quot;headerlink&quot; title=&quot;什么是LangChain&quot;&gt;&lt;/a&gt;什么是LangChain&lt;/h2&gt;&lt;p&gt;LangChain是一个大模型上层工具链，一个基于LLMs的</summary>
+      
+    
+    
+    
+    <category term="Python" scheme="https://pierce530.github.io/categories/Python/"/>
+    
+    
+    <category term="Python" scheme="https://pierce530.github.io/tags/Python/"/>
+    
+    <category term="AI" scheme="https://pierce530.github.io/tags/AI/"/>
+    
+    <category term="LangChain" scheme="https://pierce530.github.io/tags/LangChain/"/>
+    
+    <category term="Agent" scheme="https://pierce530.github.io/tags/Agent/"/>
+    
+  </entry>
+  
+  <entry>
     <title>EJS中url_for()使用</title>
     <link href="https://pierce530.github.io/2024/11/14/url-for/"/>
     <id>https://pierce530.github.io/2024/11/14/url-for/</id>
     <published>2024-11-14T10:20:39.000Z</published>
-    <updated>2024-11-14T11:15:18.230Z</updated>
+    <updated>2024-11-22T11:31:35.569Z</updated>
     
     
       
@@ -50,7 +78,7 @@
     <link href="https://pierce530.github.io/2024/06/30/langchain_chatrobot/"/>
     <id>https://pierce530.github.io/2024/06/30/langchain_chatrobot/</id>
     <published>2024-06-29T16:00:00.000Z</published>
-    <updated>2024-11-13T08:35:44.225Z</updated>
+    <updated>2024-11-23T05:07:21.097Z</updated>
     
     
       

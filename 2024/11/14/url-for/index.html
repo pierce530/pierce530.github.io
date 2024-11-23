@@ -17,7 +17,7 @@
     <link rel="icon" href="/img/favicon.ico" >
     
     
-<link rel="stylesheet" href="/css/style.css?v=1731753543249.css">
+<link rel="stylesheet" href="/css/style.css?v=1732342550107.css">
 
     <!--[if lt IE 9]>
     
@@ -125,7 +125,7 @@
 <p>其图片源是这样设置的：</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;post-thumbnail&quot;</span> <span class="attr">data-img</span>=<span class="string">&quot;&lt;%- post.photos[0] %&gt;&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;&lt;%= post.permalink %&gt;&quot;</span> <span class="attr">title</span>=<span class="string">&quot;&lt;%= post.title %&gt;&quot;</span>&gt;</span></span><br><span class="line"></span><br><span class="line">      &lt;% if (post.thumbnail) &#123; %&gt;</span><br><span class="line">          <span class="comment">&lt;!--</span></span><br><span class="line"><span class="comment">          &lt;%- image_tag(post.thumbnail, &#123; class: &quot;thumbnail&quot; &#125;) %&gt;</span></span><br><span class="line"><span class="comment">          --&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">img</span> <span class="attr">class</span>=<span class="string">&quot;thumbnail&quot;</span> <span class="attr">src</span>=<span class="string">&quot;&lt;%- url_for(&#x27;img/default.png&#x27;) %&gt;&quot;</span> <span class="attr">data-echo</span>=<span class="string">&quot;&lt;%= post.thumbnail %&gt;&quot;</span> <span class="attr">alt</span>=<span class="string">&quot;&lt;%= post.title %&gt;&quot;</span> &gt;</span></span><br><span class="line">      &lt;% &#125; else if (post.photos.length) &#123; %&gt;</span><br><span class="line">          <span class="tag">&lt;<span class="name">img</span> <span class="attr">class</span>=<span class="string">&quot;thumbnail&quot;</span> <span class="attr">src</span>=<span class="string">&quot;&lt;%- url_for(&#x27;img/default.png&#x27;) %&gt;&quot;</span> <span class="attr">data-echo</span>=<span class="string">&quot;&lt;%= post.photos[0] %&gt;&quot;</span> <span class="attr">alt</span>=<span class="string">&quot;&lt;%= post.title %&gt;&quot;</span> &gt;</span></span><br><span class="line">      &lt;% &#125; else if (theme.CDN) &#123; %&gt;</span><br><span class="line">          <span class="tag">&lt;<span class="name">img</span> <span class="attr">class</span>=<span class="string">&quot;thumbnail&quot;</span> <span class="attr">src</span>=<span class="string">&quot;&lt;%- url_for(&#x27;img/default.png&#x27;) %&gt;&quot;</span> <span class="attr">data-echo</span>=<span class="string">&quot;&lt;%- url_for(theme.CDN + &#x27;thumbnail/&#x27; + date(post.date, &#x27;YYYY-MM-DD&#x27;).charAt(date(post.date, &#x27;YYYY-MM-DD&#x27;).length - 1)  + &#x27;.jpg&#x27;) %&gt;&quot;</span> <span class="attr">alt</span>=<span class="string">&quot;默认配图&quot;</span> &gt;</span></span><br><span class="line">      &lt;% &#125; else  &#123; %&gt;</span><br><span class="line">          <span class="tag">&lt;<span class="name">img</span> <span class="attr">class</span>=<span class="string">&quot;thumbnail&quot;</span> <span class="attr">src</span>=<span class="string">&quot;&lt;%- url_for(&#x27;img/default.png&#x27;) %&gt;&quot;</span> <span class="attr">data-echo</span>=<span class="string">&quot;&lt;%- url_for(&#x27;img/thumbnail/&#x27; + date(post.date, &#x27;YYYY-MM-DD&#x27;).charAt(date(post.date, &#x27;YYYY-MM-DD&#x27;).length - 1)  + &#x27;.jpg&#x27;) %&gt;&quot;</span> <span class="attr">alt</span>=<span class="string">&quot;默认配图&quot;</span> &gt;</span></span><br><span class="line">      &lt;% &#125; %&gt;</span><br><span class="line">  <span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
-<p>其中 <code>post.thumbnail</code> 是图片相对于文档的相对路径，如 <code>img/thumbnail/Bert.jpg</code> ；者在大多数情况下可以成功展示图片，因为拼接完成后url变为 <code>http://localhost:4000/img/thumbnail/Bert.jpg</code>；但是当用户选择根据分类、标签筛选博文时，url本身变为 <code>https://pierce530.github.io/categories/Python/</code>，此时图片的地址被解析为 <code>https://pierce530.github.io/categories/Python/img/thumbnail/Bert.jpg</code>，显然无法正确获取图片。</p>
+<p>其中 <code>post.thumbnail</code> 是图片相对于文档的相对路径，如 <code>img/thumbnail/Bert.jpg</code> ；这在大多数情况下可以成功展示图片，因为拼接完成后url变为 <code>http://localhost:4000/img/thumbnail/Bert.jpg</code>；但是当用户选择根据分类、标签筛选博文时，url本身变为 <code>https://pierce530.github.io/categories/Python/</code>，此时图片的地址被解析为 <code>https://pierce530.github.io/categories/Python/img/thumbnail/Bert.jpg</code>，显然无法正确获取图片。</p>
 <p><img src="/2024/11/14/url-for/02.png" alt="图片加载失败情况"></p>
 <p>思考之后，为原先的代码 <code>post.thumbnail</code> 套上函数 <code>url_for()</code>，如下所示：</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;post-thumbnail&quot;</span> <span class="attr">data-img</span>=<span class="string">&quot;&lt;%- post.photos[0] %&gt;&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;&lt;%= post.permalink %&gt;&quot;</span> <span class="attr">title</span>=<span class="string">&quot;&lt;%= post.title %&gt;&quot;</span>&gt;</span></span><br><span class="line"></span><br><span class="line">      &lt;% if (post.thumbnail) &#123; %&gt;</span><br><span class="line">          <span class="comment">&lt;!--</span></span><br><span class="line"><span class="comment">          &lt;%- image_tag(post.thumbnail, &#123; class: &quot;thumbnail&quot; &#125;) %&gt;</span></span><br><span class="line"><span class="comment">          --&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">img</span> <span class="attr">class</span>=<span class="string">&quot;thumbnail&quot;</span> <span class="attr">src</span>=<span class="string">&quot;&lt;%- url_for(&#x27;img/default.png&#x27;) %&gt;&quot;</span> <span class="attr">data-echo</span>=<span class="string">&quot;&lt;%= url_for(post.thumbnail) %&gt;&quot;</span> <span class="attr">alt</span>=<span class="string">&quot;&lt;%= post.title %&gt;&quot;</span> &gt;</span></span><br><span class="line">      &lt;% &#125; else if (post.photos.length) &#123; %&gt;</span><br><span class="line">          <span class="tag">&lt;<span class="name">img</span> <span class="attr">class</span>=<span class="string">&quot;thumbnail&quot;</span> <span class="attr">src</span>=<span class="string">&quot;&lt;%- url_for(&#x27;img/default.png&#x27;) %&gt;&quot;</span> <span class="attr">data-echo</span>=<span class="string">&quot;&lt;%= url_for(post.photos[0]) %&gt;&quot;</span> <span class="attr">alt</span>=<span class="string">&quot;&lt;%= post.title %&gt;&quot;</span> &gt;</span></span><br><span class="line">      &lt;% &#125; else if (theme.CDN) &#123; %&gt;</span><br><span class="line">          <span class="tag">&lt;<span class="name">img</span> <span class="attr">class</span>=<span class="string">&quot;thumbnail&quot;</span> <span class="attr">src</span>=<span class="string">&quot;&lt;%- url_for(&#x27;img/default.png&#x27;) %&gt;&quot;</span> <span class="attr">data-echo</span>=<span class="string">&quot;&lt;%- url_for(theme.CDN + &#x27;thumbnail/&#x27; + date(post.date, &#x27;YYYY-MM-DD&#x27;).charAt(date(post.date, &#x27;YYYY-MM-DD&#x27;).length - 1)  + &#x27;.jpg&#x27;) %&gt;&quot;</span> <span class="attr">alt</span>=<span class="string">&quot;默认配图&quot;</span> &gt;</span></span><br><span class="line">      &lt;% &#125; else  &#123; %&gt;</span><br><span class="line">          <span class="tag">&lt;<span class="name">img</span> <span class="attr">class</span>=<span class="string">&quot;thumbnail&quot;</span> <span class="attr">src</span>=<span class="string">&quot;&lt;%- url_for(&#x27;img/default.png&#x27;) %&gt;&quot;</span> <span class="attr">data-echo</span>=<span class="string">&quot;&lt;%- url_for(&#x27;img/thumbnail/&#x27; + date(post.date, &#x27;YYYY-MM-DD&#x27;).charAt(date(post.date, &#x27;YYYY-MM-DD&#x27;).length - 1)  + &#x27;.jpg&#x27;) %&gt;&quot;</span> <span class="attr">alt</span>=<span class="string">&quot;默认配图&quot;</span> &gt;</span></span><br><span class="line">      &lt;% &#125; %&gt;</span><br><span class="line">  <span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
@@ -182,7 +182,11 @@
     
     <span class="prev fl">
         上一篇<br >
-        <a href="javascript: void(0);">没有上一篇了</a>
+        <a href="/2024/11/23/langchain-1/">
+            
+                LangChain个人学习笔记（一）
+            
+        </a>
     </span>
     
 
@@ -201,7 +205,7 @@
 <!-- 文章评论 -->
 
   
-<script src="/js/comment.js?v=1731753543229.js"></script>
+<script src="/js/comment.js?v=1732342550094.js"></script>
 
   <div id="comments" class="comment">
     <!--
@@ -324,7 +328,7 @@
     
     <li>
         <a href="/categories/Python/">Python</a>
-        <span class="badge">(2)</span>
+        <span class="badge">(3)</span>
     </li>
     
     <li>
@@ -341,13 +345,13 @@
         <!-- 文章标签 -->
 <div class="widget-bd tag-wrap">
   
-    <a class="tag-item" href="/tags/Python/" title="Python">Python (2)</a>
+    <a class="tag-item" href="/tags/Python/" title="Python">Python (3)</a>
   
-    <a class="tag-item" href="/tags/AI/" title="AI">AI (2)</a>
+    <a class="tag-item" href="/tags/AI/" title="AI">AI (3)</a>
   
-    <a class="tag-item" href="/tags/LangChain/" title="LangChain">LangChain (1)</a>
+    <a class="tag-item" href="/tags/LangChain/" title="LangChain">LangChain (2)</a>
   
-    <a class="tag-item" href="/tags/Agent/" title="Agent">Agent (1)</a>
+    <a class="tag-item" href="/tags/Agent/" title="Agent">Agent (2)</a>
   
     <a class="tag-item" href="/tags/WEB%E6%8A%80%E6%9C%AF/" title="WEB技术">WEB技术 (1)</a>
   
@@ -382,7 +386,7 @@
     <!--博客js脚本 -->
     <!-- 这里放网站js脚本 -->
 
-<script src="/js/main.js?v=1731753543250.js"></script>
+<script src="/js/main.js?v=1732342550107.js"></script>
 
 
 </body>

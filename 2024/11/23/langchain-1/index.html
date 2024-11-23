@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" >
+    <meta http-equiv="X-UA-Compatible" content="IE=11,IE=10,IE=9,IE=8" >
+    <meta name="baidu-site-verification" content="dIcXMeY8Ya" />
+    
+    <title>LangChain个人学习笔记（一） | Pierce小屋</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" >
+    <meta name="keywords" content="Pierce, Web, 章靖宇, 开发" >
+    <meta name="description" content="Pierce的个人博客" >
+
+    
+    <link rel="alternative" href="/atom.xml" title="Pierce小屋" type="application/atom+xml" >
+    
+    
+    <link rel="icon" href="/img/favicon.ico" >
+    
+    
+<link rel="stylesheet" href="/css/style.css?v=1732342550106.css">
+
+    <!--[if lt IE 9]>
+    
+<script src="/js/html5.js"></script>
+
+    <![endif]-->
+    
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="home">
+    <!--[if lt IE 9]>
+    <div class="browsehappy">
+        当前网页 <strong>不支持</strong>
+        你正在使用的浏览器. 为了正常的访问, 请 <a target="_blank" rel="noopener" href="http://browsehappy.com/">升级你的浏览器</a>.
+    </div>
+    <![endif]-->
+
+    <!-- 博客头部 -->
+    <header class="header">
+    <section class="container header-main">
+        <div class="logo">
+            <a href="/">
+                <div class="cover">
+                    <span class="name">Pierce小屋</span>
+                    <span class="description">欢迎访问</span>
+                </div>
+            </a>
+        </div>
+        <div class="dropnav iconfont icon-nav" id="JELON__btnDropNav"></div>
+        <ul class="menu hidden" id="JELON__menu">
+            
+            <li rel="/2024/11/23/langchain-1/index.html" class="item ">
+                <a href="/" title="首页" class="iconfont icon-home">&nbsp;首页</a>
+            </li>
+            
+            <li rel="/2024/11/23/langchain-1/index.html" class="item ">
+                <a href="/archives/" title="归档" class="iconfont icon-archives">&nbsp;归档</a>
+            </li>
+            
+            <li rel="/2024/11/23/langchain-1/index.html" class="item ">
+                <a href="/about/" title="关于" class="iconfont icon-staff">&nbsp;关于</a>
+            </li>
+            
+            <li rel="/2024/11/23/langchain-1/index.html" class="item ">
+                <a href="/comment/" title="留言" class="iconfont icon-comment">&nbsp;留言</a>
+            </li>
+            
+        </ul>
+        <div class="profile clearfix">
+            <div class="feeds fl">
+                
+                
+                <p class="links">
+                    
+                        <a href="https://github.com/pierce530" target="_blank">Github</a>
+                        |
+                    
+                        <a href="https://blog.csdn.net/qq_43668800" target="_blank">CSDN</a>
+                        
+                    
+                </p>
+                <p class="sns">
+                    
+                        <a href="https://weibo.com/u/7756586759" class="sinaweibo" target="_blank"><b>■</b> 新浪微博</a>
+                    
+                        <a href="https://space.bilibili.com/351790592" class="bilibili" target="_blank"><b>■</b> bilibili</a>
+                    
+                    <a href="javascript: void(0);" class="wechat">
+                        <b>■</b>
+                        公众号
+                        <span class="popover">
+                            <img src="/img/wechat_mp.jpg" width="120" height="120" alt="我的微信订阅号">
+                            <i class="arrow"></i>
+                        </span>
+                    </a>
+                </p>
+                
+            </div>
+            <div class="avatar fr">
+                <img src="/img/avatar.jpg" alt="avatar" title="Pierce" >
+            </div>
+        </div>
+    </section>
+</header>
+
+
+    <!-- 博客正文 -->
+    <div class="container body clearfix">
+        <section class="content">
+            <div class="content-main widget">
+                <!-- 文章页 -->
+<!-- 文章 -->
+<article class="post article">
+    <header class="text-center">
+        <h3 class="post-title"><span>LangChain个人学习笔记（一）</span></h3>
+    </header>
+    <p class="post-meta text-center">
+        Pierce 发表于
+        <time datetime="2024-11-22T16:00:00.000Z">2024-11-23</time>
+    </p>
+    <div id="JELON__articlePostContent" class="post-content">
+        <h2 id="什么是LangChain"><a href="#什么是LangChain" class="headerlink" title="什么是LangChain"></a>什么是LangChain</h2><p>LangChain是一个大模型上层工具链，一个基于LLMs的应用程序开发框架, 通过<strong>可组合性</strong>来使用LLM构建应用程序。其重点在于”可组合性”，即设计一系列便于集成到实际应用中的接口，根据实际需要将这些接口、模块组装在一起，降低了在实际场景中部署大语言模型的难度。LangChain可用于聊天机器人、生成式问答(GQA)、文本摘要提取等。 LangChain的目标在于：</p>
+<ol>
+<li>允许大语言模型处理不同来源的数据；</li>
+<li>让大语言模型能和布置它的环境之间进行交互；</li>
+</ol>
+<p>为了实现目的，LangChain的核心组织架构分为如图所示六块：</p>
+<p><img src="/2024/06/30/langchain_chatrobot/" alt="LangChain架构图"></p>
+<ol>
+<li><strong>Models:</strong> 提供基于OpenAI API封装好的大模型，包含常见的OpenAI大模型，也支持自定义大模型的封装；</li>
+<li><strong>Prompt:</strong> 支持自定义Prompt工程的快速实现以及和LLMs的对接；</li>
+<li><strong>Index:</strong> 接受用户查询，索引最相关内容返回；</li>
+<li><strong>Memory:</strong> 标准的接口, 在chains&#x2F;call之间保存状态，即让模型保存之间对话的“记忆”；</li>
+<li><strong>Chains:</strong> 一系列的调用(LLMs或者其他项如网络, 操作系统), Chains提供了标准的接口和设置来组合这些调用。例如先从外部的源获取信息, 然后喂给LLMs，LLMs根据信息做出推断，最终得出结论并输出，这就是一个完整的逻辑链。大模型针对一系列任务的顺序执行逻辑链，在LangChain中封装为Chains；</li>
+<li><strong>Agents:</strong> 代理, 非常重要的一环, 关于对LLMs做何种action, 如何做。将AI可能要完成的任务封装为Chain，将AI可能用到的一些逻辑行为如查阅网络资料、查询本地文档、查询数据库等封装为工具(Tools)，共同供AI智能化调用。</li>
+</ol>
+<h2 id="基本使用——调用模型"><a href="#基本使用——调用模型" class="headerlink" title="基本使用——调用模型"></a>基本使用——调用模型</h2><p>使用LangChain必须指定核心的Model，如果使用OpenAI的模型，自然需要相应的OPENAI_API_KEY。其设置方式如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="comment">#设置HTTP代理，本地IP地址以及端口号，查看IP可以通过Win/Linux下的IPCONFIG/IFCONFIG命令查看，也可以直接默认设置为127.0.0.1,端口要写挂载VPN的端口号。</span></span><br><span class="line">os.environ[<span class="string">&#x27;HTTP_PROXY&#x27;</span>] = <span class="string">&#x27;http://127.0.0.1:XXX&#x27;</span></span><br><span class="line"><span class="comment">#设置HTTPS代理，同上</span></span><br><span class="line">os.environ[<span class="string">&#x27;HTTPS_PROXY&#x27;</span>] = <span class="string">&#x27;http://127.0.0.1:XXX&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#检查代理是否有用</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">check_proxy</span>():</span><br><span class="line">    <span class="keyword">import</span> urllib.request</span><br><span class="line">    url = <span class="string">&quot;https://www.google.com&quot;</span></span><br><span class="line">    <span class="comment">#url = &quot;https://www.baidu.com&quot;</span></span><br><span class="line">    filename = <span class="string">&quot;google.html&quot;</span></span><br><span class="line">    urllib.request.urlretrieve(url, filename)<span class="comment">#保存在当前文件夹下</span></span><br><span class="line"></span><br><span class="line">check_proxy()</span><br><span class="line"></span><br><span class="line"><span class="comment">#openai的key</span></span><br><span class="line">os.environ[<span class="string">&quot;OPENAI_API_KEY&quot;</span>] = <span class="string">&quot;填上你自己的openai api  key&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#搜索api的key,仅在agent中使用，这步不是必要的</span></span><br><span class="line">os.environ[<span class="string">&#x27;SERPAPI_API_KEY&#x27;</span>]=<span class="string">&#x27;填上你自己的serpapi api key&#x27;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>当然如果没有条件使用OpenAI的模型，也可以使用其他的如通义千问，根据langchain_community包下相应的模型调用方式选择调用：</p>
+<table><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody><tr><td><a href="/docs/integrations/chat/ai21">AI21 Labs</a></td><td>Overview</td></tr><tr><td><a href="/docs/integrations/chat/alibaba_cloud_pai_eas">Alibaba Cloud PAI EAS</a></td><td>Alibaba Cloud PAI (Platform for AI) is a lightweight and cost-efficie...</td></tr><tr><td><a href="/docs/integrations/chat/anthropic">Anthropic</a></td><td>This notebook provides a quick overview for getting started with Anth...</td></tr><tr><td><a href="/docs/integrations/chat/anyscale">Anyscale</a></td><td>This notebook demonstrates the use of langchain.chat_models.ChatAnysc...</td></tr><tr><td><a href="/docs/integrations/chat/azure_chat_openai">Azure OpenAI</a></td><td>This guide will help you get started with AzureOpenAI chat models. Fo...</td></tr><tr><td><a href="/docs/integrations/chat/azureml_chat_endpoint">Azure ML Endpoint</a></td><td>Azure Machine Learning is a platform used to build, train, and deploy...</td></tr><tr><td><a href="/docs/integrations/chat/baichuan">Baichuan Chat</a></td><td>Baichuan chat models API by Baichuan Intelligent Technology. For more...</td></tr><tr><td><a href="/docs/integrations/chat/baidu_qianfan_endpoint">Baidu Qianfan</a></td><td>Baidu AI Cloud Qianfan Platform is a one-stop large model development...</td></tr><tr><td><a href="/docs/integrations/chat/bedrock">AWS Bedrock</a></td><td>This doc will help you get started with AWS Bedrock chat models. Amaz...</td></tr><tr><td><a href="/docs/integrations/chat/cerebras">Cerebras</a></td><td>This notebook provides a quick overview for getting started with Cere...</td></tr><tr><td><a href="/docs/integrations/chat/cloudflare_workersai">Cloudflare Workers AI</a></td><td>This will help you getting started with CloudflareWorkersAI chat mode...</td></tr><tr><td><a href="/docs/integrations/chat/cohere">Cohere</a></td><td>This notebook covers how to get started with Cohere chat models.</td></tr><tr><td><a href="/docs/integrations/chat/coze">Coze Chat</a></td><td>ChatCoze chat models API by coze.com. For more information, see https...</td></tr><tr><td><a href="/docs/integrations/chat/dappier">Dappier AI</a></td><td>Dappier: Powering AI with Dynamic, Real-Time Data Models</td></tr><tr><td><a href="/docs/integrations/chat/databricks">Databricks</a></td><td>Databricks Lakehouse Platform unifies data, analytics, and AI on one ...</td></tr><tr><td><a href="/docs/integrations/chat/deepinfra">DeepInfra</a></td><td>DeepInfra is a serverless inference as a service that provides access...</td></tr><tr><td><a href="/docs/integrations/chat/edenai">Eden AI</a></td><td>Eden AI is revolutionizing the AI landscape by uniting the best AI pr...</td></tr><tr><td><a href="/docs/integrations/chat/everlyai">EverlyAI</a></td><td>EverlyAI allows you to run your ML models at scale in the cloud. It a...</td></tr><tr><td><a href="/docs/integrations/chat/fireworks">Fireworks</a></td><td>This doc help you get started with Fireworks AI chat models. For deta...</td></tr><tr><td><a href="/docs/integrations/chat/friendli">Friendli</a></td><td>Friendli enhances AI application performance and optimizes cost savin...</td></tr><tr><td><a href="/docs/integrations/chat/gigachat">GigaChat</a></td><td>This notebook shows how to use LangChain with GigaChat.</td></tr><tr><td><a href="/docs/integrations/chat/google_generative_ai">Google AI</a></td><td>This docs will help you get started with Google AI chat models. For d...</td></tr><tr><td><a href="/docs/integrations/chat/google_vertex_ai_palm">Google Cloud Vertex AI</a></td><td>This page provides a quick overview for getting started with VertexAI...</td></tr><tr><td><a href="/docs/integrations/chat/gpt_router">GPTRouter</a></td><td>GPTRouter is an open source LLM API Gateway that offers a universal A...</td></tr><tr><td><a href="/docs/integrations/chat/groq">Groq</a></td><td>This will help you getting started with Groq chat models. For detaile...</td></tr><tr><td><a href="/docs/integrations/chat/huggingface">ChatHuggingFace</a></td><td>This will help you getting started with langchainhuggingface chat mod...</td></tr><tr><td><a href="/docs/integrations/chat/ibm_watsonx">IBM watsonx.ai</a></td><td>ChatWatsonx is a wrapper for IBM watsonx.ai foundation models.</td></tr><tr><td><a href="/docs/integrations/chat/jinachat">JinaChat</a></td><td>This notebook covers how to get started with JinaChat chat models.</td></tr><tr><td><a href="/docs/integrations/chat/kinetica">Kinetica</a></td><td>This notebook demonstrates how to use Kinetica to transform natural l...</td></tr><tr><td><a href="/docs/integrations/chat/konko">Konko</a></td><td>Konko API is a fully managed Web API designed to help application dev...</td></tr><tr><td><a href="/docs/integrations/chat/litellm">LiteLLM</a></td><td>LiteLLM is a library that simplifies calling Anthropic, Azure, Huggin...</td></tr><tr><td><a href="/docs/integrations/chat/litellm_router">LiteLLM Router</a></td><td>LiteLLM is a library that simplifies calling Anthropic, Azure, Huggin...</td></tr><tr><td><a href="/docs/integrations/chat/llama2_chat">Llama 2 Chat</a></td><td>This notebook shows how to augment Llama-2 LLMs with the Llama2Chat w...</td></tr><tr><td><a href="/docs/integrations/chat/llama_api">Llama API</a></td><td>This notebook shows how to use LangChain with LlamaAPI - a hosted ver...</td></tr><tr><td><a href="/docs/integrations/chat/llama_edge">LlamaEdge</a></td><td>LlamaEdge allows you to chat with LLMs of GGUF format both locally an...</td></tr><tr><td><a href="/docs/integrations/chat/llamacpp">Llama.cpp</a></td><td>llama.cpp python library is a simple Python bindings for @ggerganov</td></tr><tr><td><a href="/docs/integrations/chat/maritalk">maritalk</a></td><td>Introduction</td></tr><tr><td><a href="/docs/integrations/chat/minimax">MiniMax</a></td><td>Minimax is a Chinese startup that provides LLM service for companies ...</td></tr><tr><td><a href="/docs/integrations/chat/mistralai">MistralAI</a></td><td>This will help you getting started with Mistral chat models. For deta...</td></tr><tr><td><a href="/docs/integrations/chat/mlx">MLX</a></td><td>This notebook shows how to get started using MLX LLM's as chat models.</td></tr><tr><td><a href="/docs/integrations/chat/moonshot">Moonshot</a></td><td>Moonshot is a Chinese startup that provides LLM service for companies...</td></tr><tr><td><a href="/docs/integrations/chat/naver">Naver</a></td><td>This notebook provides a quick overview for getting started with Nave...</td></tr><tr><td><a href="/docs/integrations/chat/nvidia_ai_endpoints">NVIDIA AI Endpoints</a></td><td>This will help you getting started with NVIDIA chat models. For detai...</td></tr><tr><td><a href="/docs/integrations/chat/oci_data_science">ChatOCIModelDeployment</a></td><td>This will help you getting started with OCIModelDeployment chat model...</td></tr><tr><td><a href="/docs/integrations/chat/oci_generative_ai">OCIGenAI</a></td><td>This notebook provides a quick overview for getting started with OCIG...</td></tr><tr><td><a href="/docs/integrations/chat/octoai">ChatOctoAI</a></td><td>OctoAI offers easy access to efficient compute and enables users to i...</td></tr><tr><td><a href="/docs/integrations/chat/ollama">Ollama</a></td><td>Ollama allows you to run open-source large language models, such as L...</td></tr><tr><td><a href="/docs/integrations/chat/openai">OpenAI</a></td><td>This notebook provides a quick overview for getting started with Open...</td></tr><tr><td><a href="/docs/integrations/chat/outlines">Outlines</a></td><td>This will help you getting started with Outlines chat models. For det...</td></tr><tr><td><a href="/docs/integrations/chat/perplexity">Perplexity</a></td><td>This notebook covers how to get started with Perplexity chat models.</td></tr><tr><td><a href="/docs/integrations/chat/premai">PremAI</a></td><td>PremAI is an all-in-one platform that simplifies the creation of robu...</td></tr><tr><td><a href="/docs/integrations/chat/promptlayer_chatopenai">PromptLayer ChatOpenAI</a></td><td>This example showcases how to connect to PromptLayer to start recordi...</td></tr><tr><td><a href="/docs/integrations/chat/reka">Reka</a></td><td>This notebook provides a quick overview for getting started with Reka...</td></tr><tr><td><a href="/docs/integrations/chat/sambanova">SambaNovaCloud</a></td><td>This will help you getting started with SambaNovaCloud chat models. F...</td></tr><tr><td><a href="/docs/integrations/chat/sambastudio">SambaStudio</a></td><td>This will help you getting started with SambaStudio chat models. For ...</td></tr><tr><td><a href="/docs/integrations/chat/snowflake">Snowflake Cortex</a></td><td>Snowflake Cortex gives you instant access to industry-leading large l...</td></tr><tr><td><a href="/docs/integrations/chat/solar">solar</a></td><td>Related</td></tr><tr><td><a href="/docs/integrations/chat/sparkllm">SparkLLM Chat</a></td><td>SparkLLM chat models API by iFlyTek. For more information, see iFlyTe...</td></tr><tr><td><a href="/docs/integrations/chat/symblai_nebula">Nebula (Symbl.ai)</a></td><td>Overview</td></tr><tr><td><a href="/docs/integrations/chat/tencent_hunyuan">Tencent Hunyuan</a></td><td>Tencent's hybrid model API (Hunyuan API)</td></tr><tr><td><a href="/docs/integrations/chat/together">Together</a></td><td>This page will help you get started with Together AI chat models. For...</td></tr><tr><td><a href="/docs/integrations/chat/tongyi">Tongyi Qwen</a></td><td>Tongyi Qwen is a large language model developed by Alibaba's Damo Aca...</td></tr><tr><td><a href="/docs/integrations/chat/upstage">Upstage</a></td><td>This notebook covers how to get started with Upstage chat models.</td></tr><tr><td><a href="/docs/integrations/chat/vllm">vLLM Chat</a></td><td>vLLM can be deployed as a server that mimics the OpenAI API protocol....</td></tr><tr><td><a href="/docs/integrations/chat/volcengine_maas">Volc Enging Maas</a></td><td>This notebook provides you with a guide on how to get started with vo...</td></tr><tr><td><a href="/docs/integrations/chat/writer">Writer</a></td><td>This notebook provides a quick overview for getting started with Writ...</td></tr><tr><td><a href="/docs/integrations/chat/xai">xAI</a></td><td>This page will help you get started with xAI chat models. For detaile...</td></tr><tr><td><a href="/docs/integrations/chat/yandex">YandexGPT</a></td><td>This notebook goes over how to use Langchain with YandexGPT chat mode...</td></tr><tr><td><a href="/docs/integrations/chat/yi">ChatYI</a></td><td>This will help you getting started with Yi chat models. For detailed ...</td></tr><tr><td><a href="/docs/integrations/chat/yuan2">Yuan2.0</a></td><td>This notebook shows how to use YUAN2 API in LangChain with the langch...</td></tr><tr><td><a href="/docs/integrations/chat/zhipuai">ZHIPU AI</a></td><td>This notebook shows how to use ZHIPU AI API in LangChain with the lan...</td></tr></tbody></table>
+
+<p>当然也可以部署本地模型使用，另一篇笔记详谈。</p>
+<p>在初始时，模型包分为Chat_Model与LLMs。例如调用LLMs：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;model_name是选择的OpenAI的模型名称，n=2是生成的文本内容是两条，best_of是从2个里面选择出最佳的一条作为输出&quot;&quot;&quot;</span></span><br><span class="line">llm = OpenAI(model_name=<span class="string">&quot;text-ada-001&quot;</span>, n=<span class="number">2</span>, best_of=<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">llm(<span class="string">&quot;Tell me a scared story&quot;</span>)</span><br><span class="line"></span><br><span class="line">llm_result = llm.generate([<span class="string">&quot;How to study English&quot;</span>, <span class="string">&quot;How to generate a new idea&quot;</span>]*<span class="number">3</span>)</span><br></pre></td></tr></table></figure>
+
+<p>可以看到LLMs最基本的功能就是能够调用模型，传递一个字符串并返回一个字符串。其中的”tell me…story”就是query，传递进模型中调用问答模型给出回答，query的类型是字符串，没有限制它必须是疑问句还是陈述句，ChatGPT等大语言模型会对其内容进行相应的解析。</p>
+<p>而ChatGPT接口使用的是turbo的模型，对于聊天机器人的设计，这里有很重要的三个角色:system、human、AI。因此相应的Chat_Model有三种角色：</p>
+<ol>
+<li>system：针对现实世界中的一切描述，我们的system要决定最终想要AI做什么，一个直白的背景或者说是角色的定位，例如翻译员、银行家等；</li>
+<li>human：具体的事情，例如想要AI翻译的语句或者想要AI写出一句酷似方文山的歌词；</li>
+<li>AI：大模型决定返回的内容 使用langchain工具箱实现这个功能。</li>
+</ol>
+<p>在代码中我们将会通过langchain.schema引入的SystemMessage, HumanMessage, AIMessage来操纵具体的需求步骤，如下所示：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#导入我们所需要的相关库函数</span></span><br><span class="line"><span class="keyword">from</span> langchain.chat_models <span class="keyword">import</span> ChatOpenAI</span><br><span class="line"><span class="keyword">from</span> langchain <span class="keyword">import</span> PromptTemplate, LLMChain</span><br><span class="line"><span class="keyword">from</span> langchain.prompts.chat <span class="keyword">import</span> (</span><br><span class="line">    ChatPromptTemplate,</span><br><span class="line">    SystemMessagePromptTemplate,</span><br><span class="line">    AIMessagePromptTemplate,</span><br><span class="line">    HumanMessagePromptTemplate,</span><br><span class="line">)</span><br><span class="line"><span class="keyword">from</span> langchain.schema <span class="keyword">import</span> (</span><br><span class="line">    AIMessage,</span><br><span class="line">    HumanMessage,</span><br><span class="line">    SystemMessage</span><br><span class="line">)</span><br><span class="line"><span class="comment">#定义聊天机器人使用的聊天问答模型</span></span><br><span class="line">chat = ChatOpenAI(temperature=<span class="number">0</span>)</span><br><span class="line"><span class="comment">#由AI回复human的消息</span></span><br><span class="line"><span class="comment">#human给出的信息是一个字符串内容，给到chat之后会返回一个AIMessage信息，其中的内容将是给出的反馈答案</span></span><br><span class="line">chat([HumanMessage(content=<span class="string">&quot;Translate this sentence from English to Chinese. I love programming.&quot;</span>)])</span><br></pre></td></tr></table></figure>
+
+<p>正如我们上面图中展示的那样，我们一般定义SystemMessage的内容为给定它一个角色使OpenAI模型能够在一个知识领域内回答，这样做的好处就是对于给出的答案会更加准确，这里特别说明一点——Openai聊天模型支持一次输入多段信息：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">messages = [</span><br><span class="line">    SystemMessage(content=<span class="string">&quot;You are a helpful assistant that translates English to Chinese.&quot;</span>),</span><br><span class="line">    HumanMessage(content=<span class="string">&quot;Translate this sentence from English to Chinese. I love programming.&quot;</span>)</span><br><span class="line">]</span><br><span class="line">chat(messages)</span><br></pre></td></tr></table></figure>
+
+<p>可以使用<code>chat.generate()</code>方法处理多对对话内容，返回值LLMResult包含有输入信息。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">batch_messages = [</span><br><span class="line">    [</span><br><span class="line">        SystemMessage(content=<span class="string">&quot;You are a helpful assistant that translates English to French.&quot;</span>),</span><br><span class="line">        HumanMessage(content=<span class="string">&quot;Translate this sentence from English to French. I love programming.&quot;</span>)</span><br><span class="line">    ],</span><br><span class="line">    [</span><br><span class="line">        SystemMessage(content=<span class="string">&quot;You are a helpful assistant that translates English to Chinese.&quot;</span>),</span><br><span class="line">        HumanMessage(content=<span class="string">&quot;Translate this sentence from English to Chinese. I love artificial intelligence.&quot;</span>)</span><br><span class="line">    ],</span><br><span class="line">]</span><br><span class="line">result = chat.generate(batch_messages)</span><br><span class="line"><span class="built_in">print</span>(result)</span><br></pre></td></tr></table></figure>
+
+<p>其输出是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">LLMResult(</span><br><span class="line">  generations=[</span><br><span class="line">    [</span><br><span class="line">      ChatGeneration(</span><br><span class="line">        text=&quot;J&#x27;aime programmer.&quot;, </span><br><span class="line">        generation_info=None, </span><br><span class="line">        message=AIMessage(</span><br><span class="line">          content=&quot;J&#x27;aime programmer.&quot;, </span><br><span class="line">          additional_kwargs=&#123;&#125;</span><br><span class="line">        )</span><br><span class="line">      )</span><br><span class="line">    ], </span><br><span class="line">    [</span><br><span class="line">      ChatGeneration(</span><br><span class="line">        text=&#x27;我喜欢人工智能。&#x27;, </span><br><span class="line">        generation_info=None, </span><br><span class="line">        message=AIMessage(</span><br><span class="line">          content=&#x27;我喜欢人工智能。&#x27;, </span><br><span class="line">          additional_kwargs=&#123;&#125;</span><br><span class="line">        )</span><br><span class="line">      )</span><br><span class="line">    ]</span><br><span class="line">  ], </span><br><span class="line">  llm_output=&#123;</span><br><span class="line">    &#x27;token_usage&#x27;: &#123;</span><br><span class="line">      &#x27;prompt_tokens&#x27;: 73, </span><br><span class="line">      &#x27;completion_tokens&#x27;: 16, </span><br><span class="line">      &#x27;total_tokens&#x27;: 89</span><br><span class="line">    &#125;, </span><br><span class="line">    &#x27;model_name&#x27;: &#x27;gpt-3.5-turbo&#x27;</span><br><span class="line">  &#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+    <p class="eof">-- EOF --</p>
+    <p class="post-meta">
+        <span class="post-cat">分类：
+            <a class="cat-link" href="/categories/Python/">Python</a>
+        </span>
+        <span class="post-tags">
+            标签：
+            
+    
+        <a href="/tags/Python/" title="Python">Python</a> / 
+    
+        <a href="/tags/AI/" title="AI">AI</a> / 
+    
+        <a href="/tags/LangChain/" title="LangChain">LangChain</a> / 
+    
+        <a href="/tags/Agent/" title="Agent">Agent</a>
+    
+
+        </span>
+    </p>
+</article>
+<!-- 分享按钮 -->
+
+  <div class="article-share clearfix text-center">
+    <div class="share-area">
+      <span class="share-txt">分享到：</span>
+      <a href="javascript: window.open('http://service.weibo.com/share/share.php?url=' + encodeURIComponent(location.href) + '&title=' + document.title + '&language=zh_cn');" class="share-icon weibo"></a>
+      <a href="javascript: alert('请复制链接到微信并发送');" class="share-icon wechat"></a>
+      <a href="javascript: window.open('http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=' + encodeURIComponent(location.href) + '&title=' + document.title);" class="share-icon qqzone"></a>
+      <a href="javascript: window.open('http://connect.qq.com/widget/shareqq/index.html?url=' + encodeURIComponent(location.href) + '&desc=Jelon个人博客&title=' + document.title + '&callback=' + encodeURIComponent(location.href));" class="share-icon qq"></a>
+      <a href="javascript: window.open('http://shuo.douban.com/!service/share?href=' + encodeURIComponent(location.href) + '&name=' + document.title + '&text=' + document.title);" class="share-icon douban"></a>
+    </div>
+  </div>
+
+
+<!-- 上一篇/下一篇 -->
+
+<div class="article-nav clearfix">
+    
+    <span class="prev fl">
+        上一篇<br >
+        <a href="javascript: void(0);">没有上一篇了</a>
+    </span>
+    
+
+    
+    <span class="next fr">
+        下一篇<br >
+        <a href="/2024/11/14/url-for/">
+            
+                EJS中url_for()使用
+            
+        </a>
+    </span>
+    
+</div>
+
+<!-- 文章评论 -->
+
+  
+<script src="/js/comment.js?v=1732342550093.js"></script>
+
+  <div id="comments" class="comment">
+    <!--
+    <div class="sign-bar">
+      GitHub 已登录!
+      <span class="sign-link">登出</span>
+    </div>
+    <section class="box">
+      <div class="com-avatar"><img src="/img/jelon.jpg" alt="avatar"></div>
+      <div class="com-text">
+        <div class="main">
+          <textarea class="text-area-edited show" placeholder="欢迎评论！"></textarea>
+          <div class="text-area-preview"></div>
+        </div>
+        <div class="switch">
+          <div class="switch-item on">编辑</div>
+          <div class="switch-item">预览</div>
+        </div>
+        <div class="button">提交</div>
+      </div>
+    </section>
+    <section class="tips">注：评论支持 markdown 语法！</section>
+    <section class="list-wrap">
+      <ul class="list">
+        <li>
+          <div class="user-avatar">
+            <a href="/">
+              <img src="/img/jelon.jpg" alt="user-avatar">
+            </a>
+          </div>
+          <div class="user-comment">
+            <div class="user-comment-header">
+              <span class="post-name">张德龙</span>
+              <span class="post-time">2017年12月12日</span>
+              <span class="like liked">已赞</span>
+              <span class="like-num">2</span>
+            </div>
+            <div class="user-comment-body">333333</div>
+          </div>
+        </li>
+        <li>
+          <div class="user-avatar">
+            <a href="/">
+              <img src="/img/jelon.jpg" alt="user-avatar">
+            </a>
+          </div>
+          <div class="user-comment">
+            <div class="user-comment-header">
+              <span class="post-name">刘德华</span>
+              <span class="post-time">2017年12月12日</span>
+              <span class="like">点赞</span>
+              <span class="like-num">2</span>
+            </div>
+            <div class="user-comment-body">vvvvv</div>
+          </div>
+        </li>
+      </ul>
+      <div class="page-nav">
+        <a href="javascript: void(0);" class="item">1</a>
+        <a href="javascript: void(0);" class="item">2</a>
+        <a href="javascript: void(0);" class="item current">3</a>
+      </div>
+    </section>
+    -->
+  </div>
+  <script>
+  JELON.Comment({
+    container: 'comments',
+    label: 'langchain-1' || '2024/11/23/langchain-1/',
+    owner: '',
+    repo: '',
+    clientId: '',
+    clientSecret: ''
+  });
+  </script>
+
+
+
+<p class="text-center">
+    <img style="width: 258px; height: 258px; border: none; padding: 0; border-radius: 3px;" src="/img/wechat_reward.jpg">
+</p>
+<p class="text-center">
+    如果觉得博客对您有用，欢迎微信赞赏
+</p>
+
+            </div>
+        </section>
+        <!-- 侧栏部分 -->
+<aside class="sidebar">
+    
+    <section class="widget">
+        <h3 class="widget-hd"><strong>文章搜索</strong></h3>
+        <div class="search-form">
+  <form
+    id="searchForm"
+    method="GET"
+    action="https://www.baidu.com/s"
+    ectype="application/x-www-form-urlencoded"
+    target="_blank"
+    autocomplete="false"
+    onsubmit="javascript: return false;">
+    <input
+      id="searchKeyword"
+      type="text"
+      class="form-control"
+      placeholder="输入关键字搜索"
+      autocomplete="false"
+    />
+    <input id="searchKeywordHidden" type="hidden" name="wd" />
+    <input id="searchButton" class="btn" type="submit" value="搜索" />
+  </form>
+</div>
+    </section>
+    
+
+    <section class="widget">
+        <h3 class="widget-hd"><strong>文章分类</strong></h3>
+        <!-- 文章分类 -->
+<ul class="widget-bd">
+    
+    <li>
+        <a href="/categories/Python/">Python</a>
+        <span class="badge">(3)</span>
+    </li>
+    
+    <li>
+        <a href="/categories/JavaScript/">JavaScript</a>
+        <span class="badge">(1)</span>
+    </li>
+    
+</ul>
+    </section>
+
+    
+    <section class="widget">
+        <h3 class="widget-hd"><strong>热门标签</strong></h3>
+        <!-- 文章标签 -->
+<div class="widget-bd tag-wrap">
+  
+    <a class="tag-item" href="/tags/Python/" title="Python">Python (3)</a>
+  
+    <a class="tag-item" href="/tags/AI/" title="AI">AI (3)</a>
+  
+    <a class="tag-item" href="/tags/LangChain/" title="LangChain">LangChain (2)</a>
+  
+    <a class="tag-item" href="/tags/Agent/" title="Agent">Agent (2)</a>
+  
+    <a class="tag-item" href="/tags/WEB%E6%8A%80%E6%9C%AF/" title="WEB技术">WEB技术 (1)</a>
+  
+    <a class="tag-item" href="/tags/%E5%89%8D%E7%AB%AF/" title="前端">前端 (1)</a>
+  
+    <a class="tag-item" href="/tags/JavaScript/" title="JavaScript">JavaScript (1)</a>
+  
+    <a class="tag-item" href="/tags/Bert/" title="Bert">Bert (1)</a>
+  
+</div>
+    </section>
+    
+
+    
+
+    
+</aside>
+<!-- / 侧栏部分 -->
+    </div>
+
+    <!-- 博客底部 -->
+    <footer class="footer">
+    &copy;
+    
+        2014-2024
+    
+
+    <a href="/">Pierce Love You Three Thousand</a>
+</footer>
+<div class="back-to-top" id="JELON__backToTop" title="返回顶部">返回顶部</div>
+
+    <!--博客js脚本 -->
+    <!-- 这里放网站js脚本 -->
+
+<script src="/js/main.js?v=1732342550106.js"></script>
+
+
+</body>
+</html>
