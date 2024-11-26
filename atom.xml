@@ -6,7 +6,7 @@
   <link href="https://pierce530.github.io/atom.xml" rel="self"/>
   
   <link href="https://pierce530.github.io/"/>
-  <updated>2024-11-23T06:15:43.624Z</updated>
+  <updated>2024-11-26T08:39:06.533Z</updated>
   <id>https://pierce530.github.io/</id>
   
   <author>
@@ -17,11 +17,39 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>LangChain个人学习笔记（二）</title>
+    <link href="https://pierce530.github.io/2024/11/26/langchain-2/"/>
+    <id>https://pierce530.github.io/2024/11/26/langchain-2/</id>
+    <published>2024-11-26T08:17:05.000Z</published>
+    <updated>2024-11-26T08:39:06.533Z</updated>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;编写Prompt&quot;&gt;&lt;a href=&quot;#编写Prompt&quot; class=&quot;headerlink&quot; title=&quot;编写Prompt&quot;&gt;&lt;/a&gt;编写Prompt&lt;/h2&gt;&lt;p&gt;Prompt是一种为了更好地使用预训练语言模型的知识，采用在输入端添加额外文本的技术。Pro</summary>
+      
+    
+    
+    
+    <category term="Python" scheme="https://pierce530.github.io/categories/Python/"/>
+    
+    
+    <category term="Python" scheme="https://pierce530.github.io/tags/Python/"/>
+    
+    <category term="AI" scheme="https://pierce530.github.io/tags/AI/"/>
+    
+    <category term="LangChain" scheme="https://pierce530.github.io/tags/LangChain/"/>
+    
+    <category term="Agent" scheme="https://pierce530.github.io/tags/Agent/"/>
+    
+  </entry>
+  
+  <entry>
     <title>LangChain个人学习笔记（一）</title>
     <link href="https://pierce530.github.io/2024/11/23/langchain-1/"/>
     <id>https://pierce530.github.io/2024/11/23/langchain-1/</id>
     <published>2024-11-22T16:00:00.000Z</published>
-    <updated>2024-11-23T06:15:43.624Z</updated>
+    <updated>2024-11-26T08:18:45.955Z</updated>
     
     
       

@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" >
+    <meta http-equiv="X-UA-Compatible" content="IE=11,IE=10,IE=9,IE=8" >
+    <meta name="baidu-site-verification" content="dIcXMeY8Ya" />
+    
+    <title>LangChain个人学习笔记（二） | Pierce小屋</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" >
+    <meta name="keywords" content="Pierce, Web, 章靖宇, 开发" >
+    <meta name="description" content="Pierce的个人博客" >
+
+    
+    <link rel="alternative" href="/atom.xml" title="Pierce小屋" type="application/atom+xml" >
+    
+    
+    <link rel="icon" href="/img/favicon.ico" >
+    
+    
+<link rel="stylesheet" href="/css/style.css?v=1732610363558.css">
+
+    <!--[if lt IE 9]>
+    
+<script src="/js/html5.js"></script>
+
+    <![endif]-->
+    
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="home">
+    <!--[if lt IE 9]>
+    <div class="browsehappy">
+        当前网页 <strong>不支持</strong>
+        你正在使用的浏览器. 为了正常的访问, 请 <a target="_blank" rel="noopener" href="http://browsehappy.com/">升级你的浏览器</a>.
+    </div>
+    <![endif]-->
+
+    <!-- 博客头部 -->
+    <header class="header">
+    <section class="container header-main">
+        <div class="logo">
+            <a href="/">
+                <div class="cover">
+                    <span class="name">Pierce小屋</span>
+                    <span class="description">欢迎访问</span>
+                </div>
+            </a>
+        </div>
+        <div class="dropnav iconfont icon-nav" id="JELON__btnDropNav"></div>
+        <ul class="menu hidden" id="JELON__menu">
+            
+            <li rel="/2024/11/26/langchain-2/index.html" class="item ">
+                <a href="/" title="首页" class="iconfont icon-home">&nbsp;首页</a>
+            </li>
+            
+            <li rel="/2024/11/26/langchain-2/index.html" class="item ">
+                <a href="/archives/" title="归档" class="iconfont icon-archives">&nbsp;归档</a>
+            </li>
+            
+            <li rel="/2024/11/26/langchain-2/index.html" class="item ">
+                <a href="/about/" title="关于" class="iconfont icon-staff">&nbsp;关于</a>
+            </li>
+            
+            <li rel="/2024/11/26/langchain-2/index.html" class="item ">
+                <a href="/comment/" title="留言" class="iconfont icon-comment">&nbsp;留言</a>
+            </li>
+            
+        </ul>
+        <div class="profile clearfix">
+            <div class="feeds fl">
+                
+                
+                <p class="links">
+                    
+                        <a href="https://github.com/pierce530" target="_blank">Github</a>
+                        |
+                    
+                        <a href="https://blog.csdn.net/qq_43668800" target="_blank">CSDN</a>
+                        
+                    
+                </p>
+                <p class="sns">
+                    
+                        <a href="https://weibo.com/u/7756586759" class="sinaweibo" target="_blank"><b>■</b> 新浪微博</a>
+                    
+                        <a href="https://space.bilibili.com/351790592" class="bilibili" target="_blank"><b>■</b> bilibili</a>
+                    
+                    <a href="javascript: void(0);" class="wechat">
+                        <b>■</b>
+                        公众号
+                        <span class="popover">
+                            <img src="/img/wechat_mp.jpg" width="120" height="120" alt="我的微信订阅号">
+                            <i class="arrow"></i>
+                        </span>
+                    </a>
+                </p>
+                
+            </div>
+            <div class="avatar fr">
+                <img src="/img/avatar.jpg" alt="avatar" title="Pierce" >
+            </div>
+        </div>
+    </section>
+</header>
+
+
+    <!-- 博客正文 -->
+    <div class="container body clearfix">
+        <section class="content">
+            <div class="content-main widget">
+                <!-- 文章页 -->
+<!-- 文章 -->
+<article class="post article">
+    <header class="text-center">
+        <h3 class="post-title"><span>LangChain个人学习笔记（二）</span></h3>
+    </header>
+    <p class="post-meta text-center">
+        Pierce 发表于
+        <time datetime="2024-11-26T08:17:05.000Z">2024-11-26</time>
+    </p>
+    <div id="JELON__articlePostContent" class="post-content">
+        <h2 id="编写Prompt"><a href="#编写Prompt" class="headerlink" title="编写Prompt"></a>编写Prompt</h2><p>Prompt是一种为了更好地使用预训练语言模型的知识，采用在输入端添加额外文本的技术。Prompt的设计有时候可以极大地激发出大模型的潜力，基于prompt可以完成很多我们想象不到的任务。那么，现在就来熟悉一下什么是Prompt以及在LangChain中如何去更好地使用和完善它们，LangChain提供了几个类和函数来轻松构建Prompt模板。</p>
+<p>其实，语言模型的文本输入字符串本身就是一种prompt，但通常来说prompt由模板、一些例子（有的话）和用户的输入构成，其概念和含义并不复杂。这样设计的原因是，prompts中总有一些频繁使用到的语言，例如“假设你现在是一个 {厨师|司机|售货员}”，其中花括号内的内容因任务不同而不同，但花括号外的部分却是总要用到的，因此提出prompt template的概念，以抽象出提示模板，增加复用性。有时候，任务过于复杂，则会通过prompt给模型一些与待解决的问题相似的例子作为提示，这就是所谓的“一些例子”，这些例子也是prompt中的“特性”部分，但其整体框架，则依旧是“共性”部分。</p>
+<h3 id="PromptTemplate"><a href="#PromptTemplate" class="headerlink" title="PromptTemplate"></a>PromptTemplate</h3><p>prompt template，也就是提示模版，是一种可重复使用生成prompt的方式，用template可以模版化提示指令，它由一个字符串和可供用户输入的参数组成。 提示模版包含如下的内容：</p>
+<ul>
+<li>给语言模型的指令</li>
+<li>几个例子，帮助语言模型更好地理解用户需求并作出回答</li>
+<li>一个真正需要语言模型回答的问题</li>
+<li>…</li>
+</ul>
+<p>现在看一个创建prompt template的例子：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#一般导入的必要库，为了进一步模版化处理</span></span><br><span class="line"><span class="keyword">from</span> langchain <span class="keyword">import</span> PromptTemplate</span><br><span class="line"><span class="comment">#具体的模版内容，其中要进行补全的地方（也就是为了定制我们具体问题以及要求的地方用一个变量进行代替）用中括号</span></span><br><span class="line"><span class="comment">#进行变量的放置，不需要其他的操作，类似于字符串中对于某一个变量对其的format格式化</span></span><br><span class="line">template = <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">I want you to act as a naming consultant for new companies.</span></span><br><span class="line"><span class="string">Here are some examples of good company names:</span></span><br><span class="line"><span class="string">- search engine, Google</span></span><br><span class="line"><span class="string">- social media, Facebook</span></span><br><span class="line"><span class="string">- video sharing, YouTube</span></span><br><span class="line"><span class="string">The name should be short, catchy and easy to remember.</span></span><br><span class="line"><span class="string">What is a good name for a company that makes &#123;product&#125;?</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#input_variables就是模版中需要填补的变量，在prompttemplate中格式化模版可以将变量以及模版内容进行很好的组合</span></span><br><span class="line">prompt = PromptTemplate(</span><br><span class="line">    input_variables=[<span class="string">&quot;product&quot;</span>],</span><br><span class="line">    template=template,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(prompt)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>输出结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">PromptTemplate(</span><br><span class="line">    input_variables=[&#x27;product&#x27;], </span><br><span class="line">    output_parser=None, </span><br><span class="line">    partial_variables=&#123;&#125;, </span><br><span class="line">    template=&#x27;\n I want you to act as a naming consultant for new companies.\nHere are some examples of good company names:\n- search engine, Google\n- social media, Facebook\n- video sharing, YouTube\nThe name should be short, catchy and easy to remember.\nWhat is a good name for a company that makes &#123;product&#125;?\n&#x27;,</span><br><span class="line">    template_format=&#x27;f-string&#x27;, </span><br><span class="line">    validate_template=True</span><br><span class="line">  )</span><br></pre></td></tr></table></figure>
+
+<p>有例子可以看出，通过LangChain的PromptTemplate类，可以生成具体的prompt。prompt template接受多个输入变量，用来格式化生成prompt，即确定不同prompts中的“特性部分”，从而使提示模板本身的抽象性大大提高。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain <span class="keyword">import</span> PromptTemplate</span><br><span class="line"></span><br><span class="line"><span class="comment">#input_variables的值可以为空，说明其中没有任何变量</span></span><br><span class="line">no_input_prompt = PromptTemplate(input_variables=[], template=<span class="string">&quot;Tell me a joke.&quot;</span>)</span><br><span class="line">no_input_prompt.<span class="built_in">format</span>()</span><br><span class="line"></span><br><span class="line"><span class="comment">#一个input_variable的示例，这样模版化之后的提示将把adjective作为参数传入</span></span><br><span class="line">one_input_prompt = PromptTemplate(input_variables=[<span class="string">&quot;adjective&quot;</span>], template=<span class="string">&quot;Tell me a &#123;adjective&#125; joke.&quot;</span>)</span><br><span class="line">one_input_prompt.<span class="built_in">format</span>(adjective=<span class="string">&quot;funny&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#多个input_variables的示例，模版后的提示将adjective和content作为参数传入</span></span><br><span class="line">multiple_input_prompt = PromptTemplate(</span><br><span class="line">    input_variables=[<span class="string">&quot;adjective&quot;</span>, <span class="string">&quot;content&quot;</span>],</span><br><span class="line">    template=<span class="string">&quot;Tell me a &#123;adjective&#125; joke about &#123;content&#125;.&quot;</span></span><br><span class="line">)</span><br><span class="line">multiple_input_prompt.<span class="built_in">format</span>(adjective=<span class="string">&quot;funny&quot;</span>, content=<span class="string">&quot;chickens&quot;</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>有时候一些频繁使用的prompt模板已经保存在本地，可以直接使用：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.prompts <span class="keyword">import</span> load_prompt</span><br><span class="line"></span><br><span class="line"><span class="comment">#可以加载用json格式写好的prompt</span></span><br><span class="line">test_prompt = PromptTemplate(</span><br><span class="line">    input_variables=[<span class="string">&quot;input&quot;</span>],</span><br><span class="line">    template=<span class="string">&quot;&#123;input&#125;, tell me the answer by using Chinese.&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">#将创建好的提示模版格式化，其中的补全的变量就是1+1等于几？</span></span><br><span class="line">test_prompt.<span class="built_in">format</span>(<span class="built_in">input</span>=<span class="string">&quot;what is 1+1?&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#然后将创建好的模版保存在指定位置处</span></span><br><span class="line">test_prompt.save(<span class="string">&quot;test_prompt.json&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#加载本地的模版使用到的方法是固定的，将具体文件的位置传入即可</span></span><br><span class="line">prompt = load_prompt(<span class="string">&quot;./test_prompt.json&quot;</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>现在，来看看如果生成带有几个例子的模版，该怎么做？通过PromptTemplate类固然是可以，将例子固定在具体的模版中是我们想到的方法。那么LangChain有没有提供直接的类可以用来达到我们的目的和要求？实际上，LangChain中定义FewShotPromptTemplate类生成带有例子的prompt，从而完成incontext learning的需求：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain <span class="keyword">import</span> PromptTemplate, FewShotPromptTemplate</span><br><span class="line"></span><br><span class="line"><span class="comment">#如下是几个提示示例，让大模型知道几个例子回答的时候可以类比着回答</span></span><br><span class="line">few_examples = [</span><br><span class="line">    &#123;<span class="string">&quot;word&quot;</span>: <span class="string">&quot;happy&quot;</span>, <span class="string">&quot;antonym&quot;</span>: <span class="string">&quot;sad&quot;</span>&#125;,</span><br><span class="line">    &#123;<span class="string">&quot;word&quot;</span>: <span class="string">&quot;tall&quot;</span>, <span class="string">&quot;antonym&quot;</span>: <span class="string">&quot;short&quot;</span>&#125;,</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"><span class="comment">#我们定义如下的提示模版</span></span><br><span class="line">example_formatter_template = <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">Word: &#123;word&#125;</span></span><br><span class="line"><span class="string">Antonym: &#123;antonym&#125;\n</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#模版格式化提示模版</span></span><br><span class="line">example_prompt = PromptTemplate(</span><br><span class="line">    input_variables=[<span class="string">&quot;word&quot;</span>, <span class="string">&quot;antonym&quot;</span>],</span><br><span class="line">    template=example_formatter_template,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">#现在构建一个少样本提示模版对象：few_shot_prompt</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">其中的参数有examples, example_prompt, prefix, suffix, input_variables和example_separator。其中，</span></span><br><span class="line"><span class="string">    examples:示例，样例，这个就是我们写好的几个供大模型了解格式以及例子的具体样例</span></span><br><span class="line"><span class="string">    example_prompt:具体的模版化后的提示模版，这个可以就是通过promptTemplate构建的提示模版，只等待填入具体的变量，</span></span><br><span class="line"><span class="string">其格式内容中已经将待补全的变量放在其中</span></span><br><span class="line"><span class="string">    prefix:前缀，一般作为大模型接受指令的入口，可以去声明大模型即将承担的角色以及告诉大模型即将要做的事情等</span></span><br><span class="line"><span class="string">    suffix:后缀，一般放置于样例之后，作为提示模版的最后一部分</span></span><br><span class="line"><span class="string">    input_variables:填补的变量</span></span><br><span class="line"><span class="string">    example_separator:分割符，分割前缀、样例和后缀的标志</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line">few_shot_prompt = FewShotPromptTemplate(</span><br><span class="line">    examples=few_examples,</span><br><span class="line">    example_prompt=example_prompt,</span><br><span class="line">    prefix=<span class="string">&quot;Give the antonym of every input&quot;</span>,</span><br><span class="line">    suffix=<span class="string">&quot;Word: &#123;input&#125;\nAntonym:&quot;</span>,</span><br><span class="line">    input_variables=[<span class="string">&quot;input&quot;</span>],</span><br><span class="line">    example_separator=<span class="string">&quot;\n\n&quot;</span>,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(few_shot_prompt.<span class="built_in">format</span>(<span class="built_in">input</span>=<span class="string">&quot;big&quot;</span>))</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>那如果例子有很多，多到超过了模型的token限制，应该怎么办呢？LangChain中定义了ExampleSelector类来可控制地选择几个最好的例子供LLM学习。当用户输入很长时，它自动选择少量的例子；当用户输入很短时，它选择更多的例子。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.prompts.example_selector <span class="keyword">import</span> LengthBasedExampleSelector</span><br><span class="line"></span><br><span class="line"><span class="comment">#依然和上面一样，反义词对儿的组合，这里给出下面几种：</span></span><br><span class="line">few_examples = [</span><br><span class="line">    &#123;<span class="string">&quot;word&quot;</span>: <span class="string">&quot;beautiful&quot;</span>, <span class="string">&quot;antonym&quot;</span>: <span class="string">&quot;ugly&quot;</span>&#125;,</span><br><span class="line">    &#123;<span class="string">&quot;word&quot;</span>: <span class="string">&quot;outgoing&quot;</span>, <span class="string">&quot;antonym&quot;</span>: <span class="string">&quot;incoming&quot;</span>&#125;,</span><br><span class="line">    &#123;<span class="string">&quot;word&quot;</span>: <span class="string">&quot;happy&quot;</span>, <span class="string">&quot;antonym&quot;</span>: <span class="string">&quot;sad&quot;</span>&#125;,</span><br><span class="line">    &#123;<span class="string">&quot;word&quot;</span>: <span class="string">&quot;tall&quot;</span>, <span class="string">&quot;antonym&quot;</span>: <span class="string">&quot;short&quot;</span>&#125;,</span><br><span class="line">    &#123;<span class="string">&quot;word&quot;</span>: <span class="string">&quot;energetic&quot;</span>, <span class="string">&quot;antonym&quot;</span>: <span class="string">&quot;lethargic&quot;</span>&#125;,</span><br><span class="line">    &#123;<span class="string">&quot;word&quot;</span>: <span class="string">&quot;sunny&quot;</span>, <span class="string">&quot;antonym&quot;</span>: <span class="string">&quot;gloomy&quot;</span>&#125;,</span><br><span class="line">    &#123;<span class="string">&quot;word&quot;</span>: <span class="string">&quot;windy&quot;</span>, <span class="string">&quot;antonym&quot;</span>: <span class="string">&quot;calm&quot;</span>&#125;,</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"><span class="comment">#我们定义如下的提示模版</span></span><br><span class="line">example_formatter_template = <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">Word: &#123;word&#125;</span></span><br><span class="line"><span class="string">Antonym: &#123;antonym&#125;\n</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#模版格式化提示模版</span></span><br><span class="line">example_prompt = PromptTemplate(</span><br><span class="line">    input_variables=[<span class="string">&quot;word&quot;</span>, <span class="string">&quot;antonym&quot;</span>],</span><br><span class="line">    template=example_formatter_template,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">使用LengthBasedExampleSelector选择例子。</span></span><br><span class="line"><span class="string">其中的examples:同上示例中的作用</span></span><br><span class="line"><span class="string">example_prompt:同上示例中的作用</span></span><br><span class="line"><span class="string">max_length:这是格式化后的例子的最大长度。长度由下面的get_text_length函数决定。</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line">example_selector = LengthBasedExampleSelector(</span><br><span class="line">    examples=few_examples,</span><br><span class="line">    example_prompt=example_prompt,</span><br><span class="line">    max_length=<span class="number">25</span>,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">#现在使用example_selector来创建fewshotprompttemplate</span></span><br><span class="line">dynamic_prompt = FewShotPromptTemplate(</span><br><span class="line">    example_selector=example_selector,</span><br><span class="line">    example_prompt=example_prompt,</span><br><span class="line">    prefix=<span class="string">&quot;Give the antonym of every input&quot;</span>,</span><br><span class="line">    suffix=<span class="string">&quot;Word: &#123;input&#125;\nAntonym:&quot;</span>,</span><br><span class="line">    input_variables=[<span class="string">&quot;input&quot;</span>],</span><br><span class="line">    example_separator=<span class="string">&quot;\n\n&quot;</span>,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(dynamic_prompt.<span class="built_in">format</span>(<span class="built_in">input</span>=<span class="string">&quot;big&quot;</span>))</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>再下面是对聊天模型设置prompt的情况。chat model可以使用以前的历史信息进行单次生成回复，单次输入包含了过去聊天中的一系列模板、例子、用户问题的组合，但要注意的是，聊天模型意味着多个角色，毕竟人不能，至少不应该总是自言自语。这里的角色就包括系统（System）、用户（Human）与模型（AI）。LangChain提供了一些类和方法使得构建和使用prompt更加容易：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.prompts <span class="keyword">import</span> (</span><br><span class="line">    ChatPromptTemplate,</span><br><span class="line">    PromptTemplate,</span><br><span class="line">    SystemMessagePromptTemplate,</span><br><span class="line">    AIMessagePromptTemplate,</span><br><span class="line">    HumanMessagePromptTemplate,</span><br><span class="line">)</span><br><span class="line"><span class="keyword">from</span> langchain.schema <span class="keyword">import</span> (</span><br><span class="line">    AIMessage,</span><br><span class="line">    HumanMessage,</span><br><span class="line">    SystemMessage</span><br><span class="line">)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>ChatPromptTemplate可以使用一个或者多个MessagePromptTemplate类构建prompt。可以使用ChatPromptTemplate的format_prompt函数返回prompt值，然后将其转化为string或message对象。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 将字符串转换为提示模板，设定角色是系统</span></span><br><span class="line">system_template=<span class="string">&quot;You are a helpful assistant that translates &#123;input_language&#125; to &#123;output_language&#125;.&quot;</span></span><br><span class="line">system_message_prompt = SystemMessagePromptTemplate.from_template(system_template)</span><br><span class="line"><span class="comment"># 将字符串转换为提示模板，设定角色是用户</span></span><br><span class="line">human_template=<span class="string">&quot;&#123;text&#125;&quot;</span></span><br><span class="line">human_message_prompt = HumanMessagePromptTemplate.from_template(human_template)</span><br><span class="line"><span class="comment"># 组合提示模板，变为聊天模型的提示模板</span></span><br><span class="line">chat_prompt = ChatPromptTemplate.from_messages([system_message_prompt, human_message_prompt])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 从格式化的信息中获取完整的聊天信息，形成prompt，转为message格式</span></span><br><span class="line">chat_prompt.format_prompt(input_language=<span class="string">&quot;English&quot;</span>, output_language=<span class="string">&quot;French&quot;</span>, text=<span class="string">&quot;I love programming.&quot;</span>).to_messages()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>当然，上面的案例也可以以简便方式更快的构建出来：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">prompt=PromptTemplate(</span><br><span class="line">    template=<span class="string">&quot;You are a helpful assistant that translates &#123;input_language&#125; to &#123;output_language&#125;.&quot;</span>,</span><br><span class="line">    input_variables=[<span class="string">&quot;input_language&quot;</span>, <span class="string">&quot;output_language&quot;</span>],</span><br><span class="line">)</span><br><span class="line">system_message_prompt = SystemMessagePromptTemplate(prompt=prompt)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+    </div>
+    <p class="eof">-- EOF --</p>
+    <p class="post-meta">
+        <span class="post-cat">分类：
+            <a class="cat-link" href="/categories/Python/">Python</a>
+        </span>
+        <span class="post-tags">
+            标签：
+            
+    
+        <a href="/tags/Python/" title="Python">Python</a> / 
+    
+        <a href="/tags/AI/" title="AI">AI</a> / 
+    
+        <a href="/tags/LangChain/" title="LangChain">LangChain</a> / 
+    
+        <a href="/tags/Agent/" title="Agent">Agent</a>
+    
+
+        </span>
+    </p>
+</article>
+<!-- 分享按钮 -->
+
+  <div class="article-share clearfix text-center">
+    <div class="share-area">
+      <span class="share-txt">分享到：</span>
+      <a href="javascript: window.open('http://service.weibo.com/share/share.php?url=' + encodeURIComponent(location.href) + '&title=' + document.title + '&language=zh_cn');" class="share-icon weibo"></a>
+      <a href="javascript: alert('请复制链接到微信并发送');" class="share-icon wechat"></a>
+      <a href="javascript: window.open('http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=' + encodeURIComponent(location.href) + '&title=' + document.title);" class="share-icon qqzone"></a>
+      <a href="javascript: window.open('http://connect.qq.com/widget/shareqq/index.html?url=' + encodeURIComponent(location.href) + '&desc=Jelon个人博客&title=' + document.title + '&callback=' + encodeURIComponent(location.href));" class="share-icon qq"></a>
+      <a href="javascript: window.open('http://shuo.douban.com/!service/share?href=' + encodeURIComponent(location.href) + '&name=' + document.title + '&text=' + document.title);" class="share-icon douban"></a>
+    </div>
+  </div>
+
+
+<!-- 上一篇/下一篇 -->
+
+<div class="article-nav clearfix">
+    
+    <span class="prev fl">
+        上一篇<br >
+        <a href="javascript: void(0);">没有上一篇了</a>
+    </span>
+    
+
+    
+    <span class="next fr">
+        下一篇<br >
+        <a href="/2024/11/23/langchain-1/">
+            
+                LangChain个人学习笔记（一）
+            
+        </a>
+    </span>
+    
+</div>
+
+<!-- 文章评论 -->
+
+  
+<script src="/js/comment.js?v=1732610363541.js"></script>
+
+  <div id="comments" class="comment">
+    <!--
+    <div class="sign-bar">
+      GitHub 已登录!
+      <span class="sign-link">登出</span>
+    </div>
+    <section class="box">
+      <div class="com-avatar"><img src="/img/jelon.jpg" alt="avatar"></div>
+      <div class="com-text">
+        <div class="main">
+          <textarea class="text-area-edited show" placeholder="欢迎评论！"></textarea>
+          <div class="text-area-preview"></div>
+        </div>
+        <div class="switch">
+          <div class="switch-item on">编辑</div>
+          <div class="switch-item">预览</div>
+        </div>
+        <div class="button">提交</div>
+      </div>
+    </section>
+    <section class="tips">注：评论支持 markdown 语法！</section>
+    <section class="list-wrap">
+      <ul class="list">
+        <li>
+          <div class="user-avatar">
+            <a href="/">
+              <img src="/img/jelon.jpg" alt="user-avatar">
+            </a>
+          </div>
+          <div class="user-comment">
+            <div class="user-comment-header">
+              <span class="post-name">张德龙</span>
+              <span class="post-time">2017年12月12日</span>
+              <span class="like liked">已赞</span>
+              <span class="like-num">2</span>
+            </div>
+            <div class="user-comment-body">333333</div>
+          </div>
+        </li>
+        <li>
+          <div class="user-avatar">
+            <a href="/">
+              <img src="/img/jelon.jpg" alt="user-avatar">
+            </a>
+          </div>
+          <div class="user-comment">
+            <div class="user-comment-header">
+              <span class="post-name">刘德华</span>
+              <span class="post-time">2017年12月12日</span>
+              <span class="like">点赞</span>
+              <span class="like-num">2</span>
+            </div>
+            <div class="user-comment-body">vvvvv</div>
+          </div>
+        </li>
+      </ul>
+      <div class="page-nav">
+        <a href="javascript: void(0);" class="item">1</a>
+        <a href="javascript: void(0);" class="item">2</a>
+        <a href="javascript: void(0);" class="item current">3</a>
+      </div>
+    </section>
+    -->
+  </div>
+  <script>
+  JELON.Comment({
+    container: 'comments',
+    label: 'langchain-2' || '2024/11/26/langchain-2/',
+    owner: '',
+    repo: '',
+    clientId: '',
+    clientSecret: ''
+  });
+  </script>
+
+
+
+<p class="text-center">
+    <img style="width: 258px; height: 258px; border: none; padding: 0; border-radius: 3px;" src="/img/wechat_reward.jpg">
+</p>
+<p class="text-center">
+    如果觉得博客对您有用，欢迎微信赞赏
+</p>
+
+            </div>
+        </section>
+        <!-- 侧栏部分 -->
+<aside class="sidebar">
+    
+    <section class="widget">
+        <h3 class="widget-hd"><strong>文章搜索</strong></h3>
+        <div class="search-form">
+  <form
+    id="searchForm"
+    method="GET"
+    action="https://www.baidu.com/s"
+    ectype="application/x-www-form-urlencoded"
+    target="_blank"
+    autocomplete="false"
+    onsubmit="javascript: return false;">
+    <input
+      id="searchKeyword"
+      type="text"
+      class="form-control"
+      placeholder="输入关键字搜索"
+      autocomplete="false"
+    />
+    <input id="searchKeywordHidden" type="hidden" name="wd" />
+    <input id="searchButton" class="btn" type="submit" value="搜索" />
+  </form>
+</div>
+    </section>
+    
+
+    <section class="widget">
+        <h3 class="widget-hd"><strong>文章分类</strong></h3>
+        <!-- 文章分类 -->
+<ul class="widget-bd">
+    
+    <li>
+        <a href="/categories/Python/">Python</a>
+        <span class="badge">(4)</span>
+    </li>
+    
+    <li>
+        <a href="/categories/JavaScript/">JavaScript</a>
+        <span class="badge">(1)</span>
+    </li>
+    
+</ul>
+    </section>
+
+    
+    <section class="widget">
+        <h3 class="widget-hd"><strong>热门标签</strong></h3>
+        <!-- 文章标签 -->
+<div class="widget-bd tag-wrap">
+  
+    <a class="tag-item" href="/tags/Python/" title="Python">Python (4)</a>
+  
+    <a class="tag-item" href="/tags/AI/" title="AI">AI (4)</a>
+  
+    <a class="tag-item" href="/tags/LangChain/" title="LangChain">LangChain (3)</a>
+  
+    <a class="tag-item" href="/tags/Agent/" title="Agent">Agent (3)</a>
+  
+    <a class="tag-item" href="/tags/WEB%E6%8A%80%E6%9C%AF/" title="WEB技术">WEB技术 (1)</a>
+  
+    <a class="tag-item" href="/tags/%E5%89%8D%E7%AB%AF/" title="前端">前端 (1)</a>
+  
+    <a class="tag-item" href="/tags/JavaScript/" title="JavaScript">JavaScript (1)</a>
+  
+    <a class="tag-item" href="/tags/Bert/" title="Bert">Bert (1)</a>
+  
+</div>
+    </section>
+    
+
+    
+
+    
+</aside>
+<!-- / 侧栏部分 -->
+    </div>
+
+    <!-- 博客底部 -->
+    <footer class="footer">
+    &copy;
+    
+        2014-2024
+    
+
+    <a href="/">Pierce Love You Three Thousand</a>
+</footer>
+<div class="back-to-top" id="JELON__backToTop" title="返回顶部">返回顶部</div>
+
+    <!--博客js脚本 -->
+    <!-- 这里放网站js脚本 -->
+
+<script src="/js/main.js?v=1732610363559.js"></script>
+
+
+</body>
+</html>
